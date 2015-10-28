@@ -434,6 +434,7 @@ update_status ModuleSceneIntro::Update()
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 8));
+		circles.getLast()->data->listener = this;
 		// TODO 8: Make sure to add yourself as collision callback to the circle you creates
 	}
 
