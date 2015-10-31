@@ -361,7 +361,7 @@ bool ModuleSceneIntro::Start()
 		165, 128
 	};
 	// Left barrier
-	int leftbarrier[32] = {
+	int leftbarrier[26] = {
 		52, 511,
 		52, 457,
 		55, 455,
@@ -370,17 +370,14 @@ bool ModuleSceneIntro::Start()
 		61, 497,
 		64, 503,
 		82, 514,
-		113, 533,
-		124, 542,
-		121, 548,
-		114, 552,
-		102, 546,
+		111, 531,
+		100, 544,
 		89, 537,
 		72, 526,
 		57, 515
 	};
 	// Right barrier
-	int rightbarrier[32] = {
+	int rightbarrier[26] = {
 		278, 510,
 		278, 458,
 		276, 455,
@@ -389,11 +386,8 @@ bool ModuleSceneIntro::Start()
 		270, 499,
 		266, 503,
 		250, 514,
-		226, 528,
-		208, 539,
-		209, 548,
-		215, 552,
-		225, 547,
+		224, 529,
+		227, 544,
 		238, 538,
 		256, 526,
 		272, 516
@@ -406,8 +400,8 @@ bool ModuleSceneIntro::Start()
 	background.add(App->physics->CreateChain(PIXEL_TO_METERS(196), PIXEL_TO_METERS(122), rightstructure, 144));
 	background.add(App->physics->CreateChain(PIXEL_TO_METERS(137), PIXEL_TO_METERS(122), leftblock, 14));
 	background.add(App->physics->CreateChain(PIXEL_TO_METERS(166), PIXEL_TO_METERS(120), rightblock, 14));
-	background.add(App->physics->CreateChain(PIXEL_TO_METERS(552), PIXEL_TO_METERS(465), leftbarrier, 32));
-	background.add(App->physics->CreateChain(PIXEL_TO_METERS(213), PIXEL_TO_METERS(465), rightbarrier, 32));
+	background.add(App->physics->CreateChain(PIXEL_TO_METERS(552), PIXEL_TO_METERS(465), leftbarrier, 26));
+	background.add(App->physics->CreateChain(PIXEL_TO_METERS(213), PIXEL_TO_METERS(465), rightbarrier, 26));
 
 	return ret;
 	//--------------------------------------------------
