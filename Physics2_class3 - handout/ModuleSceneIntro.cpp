@@ -438,7 +438,7 @@ update_status ModuleSceneIntro::Update()
 		circles.getLast()->data->listener = this;
 		// TODO 8: Make sure to add yourself as collision callback to the circle you creates
 	}
-
+	/*
 	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 	{
 		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
@@ -484,6 +484,7 @@ update_status ModuleSceneIntro::Update()
 
 		ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64));
 	}
+	*/
 	
 
 	// Prepare for raycast ------------------------------------------------------
