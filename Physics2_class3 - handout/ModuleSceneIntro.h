@@ -30,6 +30,7 @@ public:
 	SDL_Texture* box;
 	SDL_Texture* rick;
 	SDL_Texture* backgroundmap;
+	SDL_Texture* frontground;
 	uint bonus_fx;
 	p2Point<int> ray;
 	bool ray_on;

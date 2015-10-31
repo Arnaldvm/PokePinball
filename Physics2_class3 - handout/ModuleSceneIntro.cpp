@@ -30,6 +30,7 @@ bool ModuleSceneIntro::Start()
 	box = App->textures->Load("pinball/crate.png");
 	rick = App->textures->Load("pinball/rick_head.png");
 	backgroundmap = App->textures->Load("pinball/pinball.png");
+	frontground = App->textures->Load("pinball/fronground.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 	// TODO: Homework - create a sensor
@@ -433,7 +434,7 @@ update_status ModuleSceneIntro::Update()
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 8));
+		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 6));
 		circles.getLast()->data->listener = this;
 		// TODO 8: Make sure to add yourself as collision callback to the circle you creates
 	}
@@ -499,6 +500,7 @@ update_status ModuleSceneIntro::Update()
 		
 	while (c != NULL){
 		App->renderer->Blit(backgroundmap, PIXEL_TO_METERS(0), PIXEL_TO_METERS(0), NULL, 0.1f, NULL);
+		App->renderer->Blit(frontground, PIXEL_TO_METERS(0), PIXEL_TO_METERS(0), NULL, 0.1f, NULL);
 		c = c->next;
 	}
 
