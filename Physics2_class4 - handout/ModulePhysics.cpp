@@ -30,32 +30,47 @@ bool ModulePhysics::Start()
 
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
 	world->SetContactListener(this);
-	/*
+	
 	// needed to create joints like mouse joint
-	//b2BodyDef bd;
-	//ground = world->CreateBody(&bd);
-
-	// big static circle as "ground" in the middle of the screen
-	int x = SCREEN_WIDTH / 2;
-	int y = SCREEN_HEIGHT / 1.5f;
-	int diameter = SCREEN_WIDTH / 2;
+	b2BodyDef bd;
+	ground = world->CreateBody(&bd);
+	
+	
+	// Left ball trigger
+	int x = 125;
+	int y = 552;
+	int diameter = 4;
 
 	b2BodyDef body;
 	body.type = b2_staticBody;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
-	//b2Body* big_ball = world->CreateBody(&body);
+	b2Body* small_ball = world->CreateBody(&body);
 
 	b2CircleShape shape;
 	shape.m_radius = PIXEL_TO_METERS(diameter) * 0.5f;
 
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-	//big_ball->CreateFixture(&fixture);
-	*/
+	small_ball->CreateFixture(&fixture);
+	
+	// Left ball trigger
+	int x2 = 219;
+	int y2 = 552;
+	int diameter2 = 4;
 
+	b2BodyDef body2;
+	body2.type = b2_staticBody;
+	body2.position.Set(PIXEL_TO_METERS(x2), PIXEL_TO_METERS(y2));
 
+	b2Body* small_ball2 = world->CreateBody(&body2);
 
+	b2CircleShape shape2;
+	shape2.m_radius = PIXEL_TO_METERS(diameter2) * 0.5f;
+
+	b2FixtureDef fixture2;
+	fixture2.shape = &shape2;
+	small_ball2->CreateFixture(&fixture2);
 
 	return true;
 }
@@ -281,14 +296,8 @@ update_status ModulePhysics::PostUpdate()
 					LOG("We have an object under the mouse!");
 					body_clicked = b;
 					
-				
-
 					mouse_position.x = PIXEL_TO_METERS(App->input->GetMouseX());
 					mouse_position.y = PIXEL_TO_METERS(App->input->GetMouseY());
-					//	 WHILE WE PROGRAMME....
-					//  + NO VAS A USAR EL PUNTO G EN TU VIDA
-					//	- SI ME METO ALGO POR EL CULO SI
-					//	+ *FACEPALM*
 	
 				b2MouseJointDef def;
 				def.bodyA = ground;
@@ -297,6 +306,7 @@ update_status ModulePhysics::PostUpdate()
 				def.dampingRatio = 0.5f;
 				def.frequencyHz = 2.0f;
 				def.maxForce = 100.0f * body_clicked->GetMass();
+				
 				mouse_joint = (b2MouseJoint*)world->CreateJoint(&def);
 				}
 			}
@@ -318,11 +328,10 @@ update_status ModulePhysics::PostUpdate()
 				}
 				if (App->input->GetMouseButton(SDL_BUTTON_LEFT == KEY_UP) == true){
 					world->DestroyJoint(mouse_joint);
-					//mouse_joint = NULL;
+					mouse_joint = NULL;
 					body_clicked = NULL;
 				}
 			}
-
 			// TODO 4: If the player releases the mouse button, destroy the joint
 
 		}
