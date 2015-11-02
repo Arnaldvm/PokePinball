@@ -72,6 +72,8 @@ bool ModulePhysics::Start()
 	fixture2.shape = &shape2;
 	small_ball2->CreateFixture(&fixture2);
 
+
+
 	return true;
 }
 
@@ -118,10 +120,10 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
+PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, b2BodyType type)
 {
 	b2BodyDef body;
-	body.type = b2_dynamicBody;
+	body.type = type;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);
@@ -417,6 +419,20 @@ int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& no
 	}
 
 	return ret;
+}
+
+void ModulePhysics::CreateLineJoint(PhysBody* body_1, PhysBody* body_2, int x_pivot_1, int y_pivot_1, int x_pivot_2, int y_pivot_2, float frequency, float damping){
+
+	b2DistanceJointDef a;
+	a.bodyA = body_1->body;
+	a.bodyB = body_2->body;
+
+	a.localAnchorA.Set(PIXEL_TO_METERS(x_pivot_1), PIXEL_TO_METERS(y_pivot_1));
+	a.localAnchorB.Set(PIXEL_TO_METERS(x_pivot_2), PIXEL_TO_METERS(y_pivot_2));
+	a.dampingRatio = damping;
+	a.frequencyHz = frequency;
+	world->CreateJoint(&a);
+
 }
 
 void ModulePhysics::BeginContact(b2Contact* contact)

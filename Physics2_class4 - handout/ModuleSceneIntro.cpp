@@ -34,13 +34,16 @@ bool ModuleSceneIntro::Start()
 
 	circles.add(App->physics->CreateCircle(350, 470, 6));
 	//circles.getLast()->data->listener = this;
-	boxes.add(App->physics->CreateRectangle(345, 575, 18, 5));
-	//boxes.getLast()->data->listener = this;
-
+	ejector1 = App->physics->CreateRectangle(345, 575, 18, 35,b2_dynamicBody);
+	ejector2 = App->physics->CreateRectangle(335, 500, 2, 2, b2_staticBody);
+	boxes.add(ejector1);
+	boxes.add(ejector2);
+	App->physics->CreateLineJoint(ejector1, ejector2, 0, 0, 0, 0, 20.0f, 1.0f);
+	ejector_force = 0;
 	lifes = 3;
 
 	//Background Chains
-	int borders[322] = {
+	int borders[324] = {
 		144, 600,
 		144, 589,
 		57, 542,
@@ -111,6 +114,7 @@ bool ModuleSceneIntro::Start()
 		360, 439,
 		360, 610,
 		339, 610,
+		339, 510,
 		339, 394,
 		340, 192,
 		333, 186,
@@ -400,7 +404,7 @@ bool ModuleSceneIntro::Start()
 		272, 516
 	};
 
-	background.add(App->physics->CreateChain(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0), borders, 322));
+	background.add(App->physics->CreateChain(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0), borders, 324));
 	background.add(App->physics->CreateChain(PIXEL_TO_METERS(93), PIXEL_TO_METERS(465), leftri, 22));
 	background.add(App->physics->CreateChain(PIXEL_TO_METERS(219), PIXEL_TO_METERS(464), rightri, 24));
 	background.add(App->physics->CreateChain(PIXEL_TO_METERS(49), PIXEL_TO_METERS(133), leftstructure, 74));
@@ -429,18 +433,24 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	/*if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		ray_on = !ray_on;
 		ray.x = App->input->GetMouseX();
 		ray.y = App->input->GetMouseY();
-	}
+	}*/
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 6));
 		circles.getLast()->data->listener = this;
 	}
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
+
+		ejector_force += 100.0f;
+		ejector1->body->ApplyForceToCenter(b2Vec2(0, ejector_force), true);
+	}
+
 	/*
 	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 	{

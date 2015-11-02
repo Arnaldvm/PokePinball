@@ -26,6 +26,8 @@ public:
 	
 
 	PhysBody* sensor;
+	PhysBody* ejector1;
+	PhysBody* ejector2;
 	bool sensed;
 
 	SDL_Texture* circle;
@@ -36,5 +38,6 @@ public:
 	uint bonus_fx;
 	p2Point<int> ray;
 	bool ray_on;
+	float ejector_force;
 	uint lifes;
 };
