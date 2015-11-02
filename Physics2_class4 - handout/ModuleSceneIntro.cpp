@@ -26,11 +26,18 @@ bool ModuleSceneIntro::Start()
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
 	circle = App->textures->Load("pinball/pokeball8.png"); 
-	//box = App->textures->Load("pinball/crate.png");
+	box = App->textures->Load("pinball/crate.png");
 	//rick = App->textures->Load("pinball/rick_head.png");
 	backgroundmap = App->textures->Load("pinball/pinball.png");
 	frontground = App->textures->Load("pinball/frontground.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+
+	circles.add(App->physics->CreateCircle(350, 470, 6));
+	//circles.getLast()->data->listener = this;
+	boxes.add(App->physics->CreateRectangle(345, 575, 18, 5));
+	//boxes.getLast()->data->listener = this;
+
+	lifes = 3;
 
 	//Background Chains
 	int borders[322] = {
@@ -508,8 +515,19 @@ update_status ModuleSceneIntro::Update()
 		int x, y;
 		c->data->GetPosition(x, y);
 		App->renderer->Blit(circle, x, y, NULL, 1.0f, c->data->GetRotation());
+		
+		if (y > 610 && lifes > 0) {
+
+			circles.del(c);
+			circles.add(App->physics->CreateCircle(350, 470, 6));
+			lifes--;
+
+		}
 		c = c->next;
+		
 	}
+
+	
 	/*
 	c = boxes.getFirst();
 
