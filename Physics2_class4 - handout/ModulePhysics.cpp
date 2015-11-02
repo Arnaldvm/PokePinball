@@ -318,7 +318,7 @@ update_status ModulePhysics::PostUpdate()
 			// TODO 3: If the player keeps pressing the mouse button, update
 			// target position and draw a red line between both anchor points
 			
-			else if ((App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT) == true && body_clicked != NULL){
+			if ((App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT) == true && body_clicked != NULL){
 
 				mouse_joint->SetTarget(mouse_position);
 				mouse_position.x = PIXEL_TO_METERS(App->input->GetMouseX());
@@ -327,11 +327,12 @@ update_status ModulePhysics::PostUpdate()
 				LOG("Drawing line ^^");
 			}
 
-			else if ((App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP) == true && body_clicked != NULL){
+			if ((App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP) == true && mouse_joint != NULL){
 					
+				
 				world->DestroyJoint(mouse_joint);
 				mouse_joint = NULL;
-				//body_clicked = NULL;
+				body_clicked = NULL;
 			}
 
 		// TODO 4: If the player releases the mouse button, destroy the joint
