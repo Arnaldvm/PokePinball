@@ -42,6 +42,32 @@ bool ModuleSceneIntro::Start()
 	ejector_force = 0;
 	lifes = 3;
 
+	int polygon1[16] = {
+		122, 550,
+		121, 543,
+		125, 539,
+		132, 540,
+		164, 562,
+		164, 567,
+		159, 568,
+		130, 555
+	};
+
+	int polygon2[16] = {
+		226, 555,
+		226, 550,
+		223, 546,
+		217, 546,
+		183, 569,
+		183, 574,
+		187, 575,
+		218, 562
+	};
+
+	polygons.add(App->physics->CreatePolygon(PIXEL_TO_METERS(121), PIXEL_TO_METERS(140), polygon1, 16));
+	polygons.add(App->physics->CreatePolygon(PIXEL_TO_METERS(220), PIXEL_TO_METERS(558), polygon2, 16));
+
+
 	//Background Chains
 	int borders[324] = {
 		144, 600,

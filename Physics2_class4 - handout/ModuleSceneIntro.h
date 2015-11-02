@@ -20,7 +20,7 @@ public:
 public:
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
-	
+	p2List<PhysBody*> polygons;
 	//p2List<PhysBody*> ricks;
 	p2List<PhysBody*> background;
 	
@@ -32,6 +32,7 @@ public:
 
 	SDL_Texture* circle;
 	SDL_Texture* box;
+	SDL_Texture* polygon;
 	//SDL_Texture* rick;
 	SDL_Texture* backgroundmap;
 	SDL_Texture* frontground;

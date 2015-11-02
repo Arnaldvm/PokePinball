@@ -45,10 +45,12 @@ public:
 
 	PhysBody* CreateCircle(int x, int y, int radius);
 	PhysBody* CreateRectangle(int x, int y, int width, int height, b2BodyType type);
-
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
+	PhysBody* CreatePolygon(int x, int y, int* points, int size);
 	void CreateLineJoint(PhysBody* body_1, PhysBody* body_2, int x_pivot_1, int y_pivot_1, int x_pivot_2, int y_pivot_2, float frequency, float damping);
+	void CreateRevoluteJoint(PhysBody* bodyA, PhysBody* bodyB, int anchor_Ax, int anchor_Ay, int anchor_Bx, int anchor_By, int max_angle, int min_angle);
+
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
@@ -58,7 +60,8 @@ private:
 	bool debug;
 	b2World* world;
 	b2MouseJoint* mouse_joint;
-	b2DistanceJoint* distance_joint;
+	b2DistanceJoint* line_joint;
+	b2RevoluteJoint* revolute_joint;
 	b2Body* ground;
 	b2Vec2 mouse_position;
 	b2Body* body_clicked;

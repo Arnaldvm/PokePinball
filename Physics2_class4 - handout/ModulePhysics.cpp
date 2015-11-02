@@ -16,6 +16,8 @@ ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app,
 {
 	world = NULL;
 	mouse_joint = NULL;
+	revolute_joint = NULL;
+	line_joint = NULL;
 	debug = true;
 }
 
@@ -204,6 +206,41 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 	pbody->width = pbody->height = 0;
 
 	return pbody;
+}
+
+
+PhysBody* ModulePhysics::CreatePolygon(int x, int y, int* points, int size)
+{
+	b2BodyDef polygon;
+	polygon.type = b2_dynamicBody;
+	polygon.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	polygon.angle = 0.0f;
+
+	b2Body* p = world->CreateBody(&polygon);
+
+	b2PolygonShape polyshape;
+	b2Vec2* poly = new b2Vec2[size / 2];
+
+	for (uint i = 0; i < size / 2; ++i)
+	{
+		poly[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
+		poly[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
+	}
+
+	polyshape.Set(poly, size / 2);
+
+	b2FixtureDef polyfixture;
+	polyfixture.shape = &polyshape;
+	p->CreateFixture(&polyfixture);
+
+	delete[] poly;
+
+	PhysBody* polybody = new PhysBody();
+	polybody->body = p;
+	p->SetUserData(polybody);
+	polybody->width = polybody->height = 0;
+
+	return(polybody);
 }
 
 // 
@@ -434,6 +471,26 @@ void ModulePhysics::CreateLineJoint(PhysBody* body_1, PhysBody* body_2, int x_pi
 	world->CreateJoint(&a);
 
 }
+
+void ModulePhysics::CreateRevoluteJoint(PhysBody* bodyA, PhysBody* bodyB, int anchor_Ax, int anchor_Ay, int anchor_Bx, int anchor_By, int max_angle, int min_angle)
+{
+	b2RevoluteJointDef revolutejoint;
+	revolutejoint.bodyA = bodyA->body;
+	revolutejoint.bodyB = bodyB->body;
+
+	revolutejoint.localAnchorA.Set(PIXEL_TO_METERS(anchor_Ax), PIXEL_TO_METERS(anchor_Ay));
+	revolutejoint.localAnchorB.Set(PIXEL_TO_METERS(anchor_Bx), PIXEL_TO_METERS(anchor_By));
+
+	if (max_angle != NULL && min_angle != NULL)
+	{
+		revolutejoint.enableLimit = true;
+		revolutejoint.lowerAngle = -45 * DEGTORAD;
+		revolutejoint.upperAngle = 45 * DEGTORAD;
+	}
+
+	revolute_joint = (b2RevoluteJoint*)world->CreateJoint(&revolutejoint);
+}
+
 
 void ModulePhysics::BeginContact(b2Contact* contact)
 {
