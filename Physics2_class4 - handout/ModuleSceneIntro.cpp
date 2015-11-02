@@ -32,41 +32,53 @@ bool ModuleSceneIntro::Start()
 	frontground = App->textures->Load("pinball/frontground.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
-	circles.add(App->physics->CreateCircle(350, 470, 6));
+	circles.add(App->physics->CreateCircle(350, 470, 6, b2_dynamicBody));
 	//circles.getLast()->data->listener = this;
+
+
+	//------Ejector
 	ejector1 = App->physics->CreateRectangle(345, 575, 18, 35,b2_dynamicBody);
 	ejector2 = App->physics->CreateRectangle(335, 500, 2, 2, b2_staticBody);
 	boxes.add(ejector1);
 	boxes.add(ejector2);
 	App->physics->CreateLineJoint(ejector1, ejector2, 0, 0, 0, 0, 20.0f, 1.0f);
 	ejector_force = 0;
+
+
 	lifes = 3;
 
+	//------Flippers
+	left_ball = App->physics->CreateCircle(125, 552, 1, b2_staticBody);
+	right_ball = App->physics->CreateCircle(219, 552, 1, b2_staticBody);
+
 	int polygon1[16] = {
-		122, 550,
-		121, 543,
-		125, 539,
-		132, 540,
-		164, 562,
-		164, 567,
-		159, 568,
-		130, 555
+		122, 540,
+		121, 533,
+		125, 529,
+		132, 530,
+		164, 552,
+		164, 557,
+		159, 558,
+		130, 545
 	};
 
 	int polygon2[16] = {
-		226, 555,
-		226, 550,
-		223, 546,
-		217, 546,
-		183, 569,
-		183, 574,
-		187, 575,
-		218, 562
+		226, 545,
+		226, 540,
+		223, 536,
+		217, 536,
+		183, 559,
+		183, 564,
+		187, 565,
+		218, 552
 	};
 
-	polygons.add(App->physics->CreatePolygon(PIXEL_TO_METERS(121), PIXEL_TO_METERS(140), polygon1, 16));
-	polygons.add(App->physics->CreatePolygon(PIXEL_TO_METERS(220), PIXEL_TO_METERS(558), polygon2, 16));
-
+	left_flipper = App->physics->CreatePolygon(PIXEL_TO_METERS(121), PIXEL_TO_METERS(500), polygon1, 16);
+	right_flipper = App->physics->CreatePolygon(PIXEL_TO_METERS(220), PIXEL_TO_METERS(500), polygon2, 16);
+	polygons.add(left_flipper);
+	polygons.add(right_flipper);
+	App->physics->CreateRevoluteJoint(left_ball, left_flipper, 0, 0, 0, 0, 30, -30);
+	App->physics->CreateRevoluteJoint(right_ball, right_flipper, 0, 0, 0, 0, 30, -30);
 
 	//Background Chains
 	int borders[324] = {
@@ -468,13 +480,22 @@ update_status ModuleSceneIntro::Update()
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 6));
+		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 6, b2_dynamicBody));
 		circles.getLast()->data->listener = this;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
 
-		ejector_force += 100.0f;
+		ejector_force += 50.0f;
 		ejector1->body->ApplyForceToCenter(b2Vec2(0, ejector_force), true);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT){
+
+		left_flipper->body->ApplyAngularImpulse(-360, true);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT){
+
+		right_flipper->body->ApplyAngularImpulse(360, true);
 	}
 
 	/*
@@ -555,7 +576,7 @@ update_status ModuleSceneIntro::Update()
 		if (y > 610 && lifes > 0) {
 
 			circles.del(c);
-			circles.add(App->physics->CreateCircle(350, 470, 6));
+			circles.add(App->physics->CreateCircle(350, 470, 6, b2_dynamicBody));
 			lifes--;
 
 		}

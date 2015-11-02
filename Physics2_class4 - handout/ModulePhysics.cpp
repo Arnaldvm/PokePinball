@@ -37,7 +37,7 @@ bool ModulePhysics::Start()
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
 	
-	
+	/*
 	// Left ball trigger
 	int x = 125;
 	int y = 552;
@@ -73,7 +73,7 @@ bool ModulePhysics::Start()
 	b2FixtureDef fixture2;
 	fixture2.shape = &shape2;
 	small_ball2->CreateFixture(&fixture2);
-
+	*/
 
 
 	return true;
@@ -98,10 +98,10 @@ update_status ModulePhysics::PreUpdate()
 	return UPDATE_CONTINUE;
 }
 
-PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
+PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, b2BodyType type)
 {
 	b2BodyDef body;
-	body.type = b2_dynamicBody;
+	body.type = type;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);

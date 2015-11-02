@@ -28,6 +28,12 @@ public:
 	PhysBody* sensor;
 	PhysBody* ejector1;
 	PhysBody* ejector2;
+
+	PhysBody* left_ball;
+	PhysBody* left_flipper;
+	PhysBody* right_ball;
+	PhysBody* right_flipper;
+
 	bool sensed;
 
 	SDL_Texture* circle;
