@@ -30,6 +30,9 @@ bool ModuleSceneIntro::Start()
 	//rick = App->textures->Load("pinball/rick_head.png");
 	backgroundmap = App->textures->Load("pinball/pinball.png");
 	frontground = App->textures->Load("pinball/frontground.png");
+	left_flipper_img = App->textures->Load("pinball/left_flipper.png");
+	right_flipper_img = App->textures->Load("pinball/right_flipper.png");
+	spoink = App->textures->Load("pinball/spoink.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 	circles.add(App->physics->CreateCircle(350, 470, 6, b2_dynamicBody, 0.5f));
@@ -73,12 +76,12 @@ bool ModuleSceneIntro::Start()
 		218, 552
 	};
 
-	left_flipper = App->physics->CreatePolygon(PIXEL_TO_METERS(121), PIXEL_TO_METERS(500), polygon1, 16);
+	left_flipper = App->physics->CreatePolygon(PIXEL_TO_METERS(121), PIXEL_TO_METERS(558), polygon1, 16);
 	right_flipper = App->physics->CreatePolygon(PIXEL_TO_METERS(220), PIXEL_TO_METERS(500), polygon2, 16);
 	polygons.add(left_flipper);
 	polygons.add(right_flipper);
-	App->physics->CreateRevoluteJoint(left_flipper, left_ball, 0, 0, 0, 0, 30, -30);
-	App->physics->CreateRevoluteJoint(right_flipper, right_ball, 0, 0, 0, 0, 30, -30);
+	App->physics->CreateRevoluteJoint(left_flipper, left_ball, 126, 535, 0, 0, 30, -30);
+	App->physics->CreateRevoluteJoint(right_flipper, right_ball, 220, 542, 0, 0, 30, -30);
 
 
 	//-----------Bouncers
@@ -86,8 +89,8 @@ bool ModuleSceneIntro::Start()
 	App->physics->CreateCircle(143, 182, 8, b2_staticBody, 1.5f);
 	App->physics->CreateCircle(192, 182, 8, b2_staticBody, 1.5f);
 
-	App->physics->CreateRectangle(112, 488, 10, 53, b2_staticBody, 1.5f, 325*DEGTORAD);
-	App->physics->CreateRectangle(234, 488, 10, 53, b2_staticBody, 1.5f, 35 *DEGTORAD);
+	App->physics->CreateRectangle(112, 488, 10, 53, b2_staticBody, 1.5f, 325 * DEGTORAD);
+	App->physics->CreateRectangle(234, 488, 10, 53, b2_staticBody, 1.5f, 35 * DEGTORAD);
 
 
 	//Background Chains
@@ -594,7 +597,29 @@ update_status ModuleSceneIntro::Update()
 		
 	}
 
-	
+	c = polygons.getFirst();
+
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		c->data->GetRotation();
+		App->renderer->Blit(left_flipper_img, PIXEL_TO_METERS(126), PIXEL_TO_METERS(535), NULL, 0.1f, NULL);
+		App->renderer->Blit(right_flipper_img, PIXEL_TO_METERS(220), PIXEL_TO_METERS(542), NULL, 0.1f, NULL);
+
+		c = c->next;
+	}
+
+	c = rectangles.getFirst();
+
+	while (c != NULL)
+	{ 
+		int x, y;
+		c->data->GetPosition(x, y);
+		App->renderer->Blit(spoink, PIXEL_TO_METERS(345), PIXEL_TO_METERS(575), NULL, 0.1f, NULL);
+
+		c = c->next;
+	}
 	/*
 	c = boxes.getFirst();
 
@@ -624,8 +649,8 @@ update_status ModuleSceneIntro::Update()
 	*/
 	//Background --------------------------
 
-	
 	App->renderer->Blit(frontground, PIXEL_TO_METERS(0), PIXEL_TO_METERS(0), NULL, 0.1f, NULL);
+
 
 	// ray -----------------
 	if(ray_on == true)

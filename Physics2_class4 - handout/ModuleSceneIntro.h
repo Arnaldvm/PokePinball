@@ -23,6 +23,7 @@ public:
 	p2List<PhysBody*> polygons;
 	//p2List<PhysBody*> ricks;
 	p2List<PhysBody*> background;
+	p2List<PhysBody*> rectangles;
 	
 
 	PhysBody* sensor;
@@ -38,7 +39,9 @@ public:
 
 	SDL_Texture* circle;
 	SDL_Texture* box;
-	SDL_Texture* polygon;
+	SDL_Texture* left_flipper_img;
+	SDL_Texture* right_flipper_img;
+	SDL_Texture* spoink;
 	//SDL_Texture* rick;
 	SDL_Texture* backgroundmap;
 	SDL_Texture* frontground;
