@@ -74,9 +74,9 @@ bool ModuleSceneIntro::Start()
 	sensors.add(Sensor(this, 188, 465, SensorType::pokeball));
 
 	//Shroomishs
-	sensors.add(Sensor(this, 158, 214, SensorType::shroomish));
-	sensors.add(Sensor(this, 135, 174, SensorType::shroomish));
-	sensors.add(Sensor(this, 184, 174, SensorType::shroomish));
+	sensors.add(Sensor(this, 159, 215, SensorType::shroomish));
+	sensors.add(Sensor(this, 136, 175, SensorType::shroomish));
+	sensors.add(Sensor(this, 185, 175, SensorType::shroomish));
 	
 	//Buttons
 	sensors.add(Sensor(this, 59, 421, SensorType::button));
@@ -653,7 +653,7 @@ update_status ModuleSceneIntro::Update()
 			if (s->data.type == SensorType::small_bonus || s->data.type == SensorType::big_bonus)
 				App->renderer->Blit(s->data.texture, s->data.x + 2, s->data.y + 1);
 			if (s->data.type == SensorType::shroomish) {
-				App->renderer->Blit(s->data.texture, s->data.x - 8, s->data.y - 10);
+				App->renderer->Blit(s->data.texture, s->data.x-12, s->data.y - 8);
 				s->data.image = false;
 			}
 			if (s->data.type == SensorType::triangle_left) {
