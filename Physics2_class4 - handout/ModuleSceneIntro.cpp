@@ -35,7 +35,7 @@ bool ModuleSceneIntro::Start()
 	spoink = App->textures->Load("pinball/spoink.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
-	circles.add(App->physics->CreateCircle(350, 470, 6, b2_dynamicBody, 0.5f));
+	circles.add(App->physics->CreateCircle(350, 470, 6, b2_dynamicBody, 0.5f, false));
 	circles.getLast()->data->listener = this;
 
 
@@ -51,8 +51,8 @@ bool ModuleSceneIntro::Start()
 	lifes = 3;
 
 	//------Flippers
-	left_ball = App->physics->CreateCircle(125, 552, 1, b2_staticBody, 1.0f);
-	right_ball = App->physics->CreateCircle(219, 552, 1, b2_staticBody, 1.0f);
+	left_ball = App->physics->CreateCircle(125, 552, 1, b2_staticBody, 1.0f, false);
+	right_ball = App->physics->CreateCircle(219, 552, 1, b2_staticBody, 1.0f, false);
 
 	int polygon1[16] = {
 		122, 540,
@@ -83,13 +83,29 @@ bool ModuleSceneIntro::Start()
 	App->physics->CreateRevoluteJoint(left_flipper, left_ball, 126, 535, 0, 0, 50, -50);
 	App->physics->CreateRevoluteJoint(right_flipper, right_ball, 220, 542, 0, 0, 50, -50);
 
+	//-----------Sensors
+
+	App->physics->CreateCircle(47, 479, 7, b2_staticBody, 1.5f, true);
+	App->physics->CreateCircle(82, 479, 7, b2_staticBody, 1.5f, true);
+	App->physics->CreateCircle(263, 479, 7, b2_staticBody, 1.5f, true);
+	App->physics->CreateCircle(298, 479, 7, b2_staticBody, 1.5f, true);
+	App->physics->CreateCircle(150, 437, 8, b2_staticBody, 1.5f, true);
+	App->physics->CreateCircle(173, 437, 8, b2_staticBody, 1.5f, true);
+	App->physics->CreateCircle(196, 437, 8, b2_staticBody, 1.5f, true);
+	App->physics->CreateCircle(127, 134, 4, b2_staticBody, 1.5f, true);
+	App->physics->CreateCircle(157, 134, 4, b2_staticBody, 1.5f, true);
+	App->physics->CreateCircle(187, 134, 4, b2_staticBody, 1.5f, true);
+	App->physics->CreateCircle(273, 250, 7, b2_staticBody, 1.5f, true);
+	App->physics->CreateCircle(85, 241, 7, b2_staticBody, 1.5f, true);
+	App->physics->CreateCircle(131, 258, 4, b2_staticBody, 1.5f, true);
+	App->physics->CreateCircle(85, 285, 4, b2_staticBody, 1.5f, true);
 
 	//-----------Bouncers
-	App->physics->CreateCircle(166, 222, 8, b2_staticBody, 1.5f);
-	App->physics->CreateCircle(143, 182, 8, b2_staticBody, 1.5f);
-	App->physics->CreateCircle(192, 182, 8, b2_staticBody, 1.5f);
-	App->physics->CreateCircle(65, 427, 8, b2_staticBody, 1.5f);
-	App->physics->CreateCircle(281, 427, 8, b2_staticBody, 1.5f);
+	App->physics->CreateCircle(166, 222, 8, b2_staticBody, 1.5f, false);
+	App->physics->CreateCircle(143, 182, 8, b2_staticBody, 1.5f, false);
+	App->physics->CreateCircle(192, 182, 8, b2_staticBody, 1.5f, false);
+	App->physics->CreateCircle(65, 427, 8, b2_staticBody, 1.5f, false);
+	App->physics->CreateCircle(281, 427, 8, b2_staticBody, 1.5f, false);
 
 	App->physics->CreateRectangle(112, 488, 10, 53, b2_staticBody, 1.5f, 325 * DEGTORAD);
 	App->physics->CreateRectangle(234, 488, 10, 53, b2_staticBody, 1.5f, 35 * DEGTORAD);
@@ -493,7 +509,7 @@ update_status ModuleSceneIntro::Update()
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 6, b2_dynamicBody, 0.5f));
+		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 6, b2_dynamicBody, 0.5f, false));
 		circles.getLast()->data->listener = this;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
@@ -593,7 +609,7 @@ update_status ModuleSceneIntro::Update()
 		if (y > 610 && lifes > 0) {
 
 			circles.del(c);
-			circles.add(App->physics->CreateCircle(350, 470, 6, b2_dynamicBody, 0.5f));
+			circles.add(App->physics->CreateCircle(350, 470, 6, b2_dynamicBody, 0.5f, false));
 			circles.getLast()->data->listener = this;
 			lifes--;
 

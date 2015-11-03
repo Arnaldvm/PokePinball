@@ -98,7 +98,7 @@ update_status ModulePhysics::PreUpdate()
 	return UPDATE_CONTINUE;
 }
 
-PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, b2BodyType type, float restitution)
+PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, b2BodyType type, float restitution, bool is_sensor)
 {
 	b2BodyDef body;
 	body.type = type;
@@ -112,6 +112,13 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, b2BodyType type,
 	fixture.shape = &shape;
 	fixture.restitution = restitution;
 	fixture.density = 1.0f;
+
+	if (is_sensor == true)
+	{
+		fixture.isSensor = true;
+	}
+	else
+		fixture.isSensor = false;
 
 	b->CreateFixture(&fixture);
 
