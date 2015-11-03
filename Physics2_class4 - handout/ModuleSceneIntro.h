@@ -5,6 +5,7 @@
 #include "Globals.h"
 
 class PhysBody;
+class ModuleSceneIntro;
 
 enum SensorType
 {
@@ -12,6 +13,8 @@ enum SensorType
 	small_bonus,
 	pokeball,
 	shroomish,
+	button,
+	bouncer,
 };
 
 struct Sensor
@@ -83,6 +86,9 @@ public:
 	uint flipper_fx;
 	uint triangle_fx;
 	uint button_fx;
+	uint deadball_fx;
+	uint losing_fx;
+		//Freestyle SPAGHETTIcode BITCH
 
 	//SDL_Texture* rick;
 	SDL_Texture* backgroundmap;
@@ -93,4 +99,5 @@ public:
 	uint lifes;
 	uint score;
 	uint last_score;
+	bool game_over = false;
 };

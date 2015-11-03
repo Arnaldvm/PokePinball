@@ -35,25 +35,64 @@ bool ModuleSceneIntro::Start()
 	right_flipper_img = App->textures->Load("pinball/right_trigger.png");
 	spoink = App->textures->Load("pinball/spoink.png");
 
+	//---- Sensors
 	big_bonus = App->textures->Load("pinball/big_bonus.png");
 	small_bonus = App->textures->Load("pinball/small_bonus.png");
 	pokeball = App->textures->Load("pinball/pokeball_img.png");
 	shroomish = App->textures->Load("pinball/shroomish_img.png");
-	uint bonus_fx;
-	uint shroomish_fx;
-	uint eject1_fx;
-	uint eject2_fx;
-	uint flipper_fx;
-	uint triangle_fx;
-	uint button_fx;
 
-	//bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+	//---- Audios
+	bonus_fx = App->audio->LoadFx("pinball/audio_bonus.wav");
+	shroomish_fx = App->audio->LoadFx("pinball/audio_sroomish.wav");;
+	eject1_fx = App->audio->LoadFx("pinball/audio_ejector_load.wav");;
+	eject2_fx = App->audio->LoadFx("pinball/audio_ejector_eject.wav");;
+	flipper_fx = App->audio->LoadFx("pinball/audio_flipper.wav");;
+	triangle_fx = App->audio->LoadFx("pinball/audio_bouncer.wav");;
+	button_fx = App->audio->LoadFx("pinball/audio_button.wav");;
+	deadball_fx = App->audio->LoadFx("pinball/audio_dead_ball.wav");
+	losing_fx = App->audio->LoadFx("pinball/audio_losing.wav");
 
 
+	//------ Sensors
+	//4 bottom
+	sensors.add(Sensor(this, 39, 471, SensorType::big_bonus));
+	sensors.add(Sensor(this, 74, 471, SensorType::big_bonus));
+	sensors.add(Sensor(this, 255, 471, SensorType::big_bonus));
+	sensors.add(Sensor(this, 290, 471, SensorType::big_bonus));
+		
+	//3 top
+	sensors.add(Sensor(this, 121, 128, SensorType::small_bonus));
+	sensors.add(Sensor(this, 151, 128, SensorType::small_bonus));
+	sensors.add(Sensor(this, 181, 128, SensorType::small_bonus));
+	//wailmer + shop
+	sensors.add(Sensor(this, 273, 248, SensorType::small_bonus));
+	sensors.add(Sensor(this, 77, 238, SensorType::small_bonus));
 
+	//pokeballs
+	sensors.add(Sensor(this, 142, 465, SensorType::pokeball));
+	sensors.add(Sensor(this, 165, 465, SensorType::pokeball));
+	sensors.add(Sensor(this, 188, 465, SensorType::pokeball));
+
+	//Shroomishs
+	sensors.add(Sensor(this, 158, 214, SensorType::shroomish));
+	sensors.add(Sensor(this, 135, 174, SensorType::shroomish));
+	sensors.add(Sensor(this, 184, 174, SensorType::shroomish));
+	
+	//Buttons
+	sensors.add(Sensor(this, 59, 421, SensorType::button));
+	sensors.add(Sensor(this, 275, 421, SensorType::button));
+
+	//Triangles bouncers
+	sensors.add(Sensor(this, 112, 490, SensorType::bouncer));
+	sensors.add(Sensor(this, 234, 490, SensorType::bouncer));
+
+	
+
+	//First ball
 	circles.add(App->physics->CreateCircle(350, 470, 6, b2_dynamicBody, 0.5f, false));
 	circles.getLast()->data->listener = this;
 
+	//Small ball below flippers
 	App->physics->CreateCircle(173, 595, 3, b2_staticBody, 0.5f, false);
 
 
@@ -65,10 +104,11 @@ bool ModuleSceneIntro::Start()
 	App->physics->CreateLineJoint(ejector1, ejector2, 0, 0, 0, 0, 25.0f, 0.8f);
 	ejector_force = 0;
 
-
+	// Variables
 	lifes = 3;
 	score = 0;
 	last_score = 0;
+
 	//------Flippers
 	left_ball = App->physics->CreateCircle(125, 552, 1, b2_staticBody, 1.0f, false);
 	right_ball = App->physics->CreateCircle(219, 552, 1, b2_staticBody, 1.0f, false);
@@ -102,37 +142,15 @@ bool ModuleSceneIntro::Start()
 	App->physics->CreateRevoluteJoint(left_flipper, left_ball, 126, 535, 0, 0, 70, 10);
 	App->physics->CreateRevoluteJoint(right_flipper, right_ball, 220, 542, 0, 0, -10, -70);
 
-	//-----------Sensors
-
-	//4 bottom
-	sensors_bonus.add(App->physics->CreateCircle(47, 479, 7, b2_staticBody, 1.0f, true));
-	
-	sensors_bonus.add(App->physics->CreateCircle(82, 479, 7, b2_staticBody, 1.0f, true));
-	sensors_bonus.add(App->physics->CreateCircle(263, 479, 7, b2_staticBody, 1.0f, true));
-	sensors_bonus.add(App->physics->CreateCircle(298, 479, 7, b2_staticBody, 1.0f, true));
-	//3 top
-	sensors_bonus.add(App->physics->CreateCircle(127, 134, 4, b2_staticBody, 1.0f, true));
-	sensors_bonus.add(App->physics->CreateCircle(157, 134, 4, b2_staticBody, 1.0f, true));
-	sensors_bonus.add(App->physics->CreateCircle(187, 134, 4, b2_staticBody, 1.0f, true));
-	//wailmer + shop
-	sensors_bonus.add(App->physics->CreateCircle(273, 250, 7, b2_staticBody, 1.0f, true));
-	sensors_bonus.add(App->physics->CreateCircle(85, 241, 7, b2_staticBody, 1.0f, true));
-	
-
-	//pokeballs
-	sensors_pokeballs.add(App->physics->CreateCircle(150, 473, 8, b2_staticBody, 1.0f, true));
-	sensors_pokeballs.add(App->physics->CreateCircle(173, 473, 8, b2_staticBody, 1.0f, true));
-	sensors_pokeballs.add(App->physics->CreateCircle(196, 473, 8, b2_staticBody, 1.0f, true));
-
 	//-----------Bouncers
 	//Shroomishs
-	bouncers.add(App->physics->CreateCircle(166, 222, 8, b2_staticBody, 1.25f, false));
-	bouncers.add(App->physics->CreateCircle(143, 182, 8, b2_staticBody, 1.25f, false));
-	bouncers.add(App->physics->CreateCircle(192, 182, 8, b2_staticBody, 1.25f, false));
+	App->physics->CreateCircle(166, 222, 8, b2_staticBody, 1.25f, false);
+	App->physics->CreateCircle(143, 182, 8, b2_staticBody, 1.25f, false);
+	App->physics->CreateCircle(192, 182, 8, b2_staticBody, 1.25f, false);
 	//Buttons
-	buttons.add(App->physics->CreateCircle(65, 427, 8, b2_staticBody, 1.25f, false));
-	buttons.add(App->physics->CreateCircle(281, 427, 8, b2_staticBody, 1.25f, false));
-
+	App->physics->CreateCircle(65, 427, 8, b2_staticBody, 1.25f, false);
+	App->physics->CreateCircle(281, 427, 8, b2_staticBody, 1.25f, false);
+	//Triangles bouncers
 	App->physics->CreateRectangle(112, 490, 6, 50, b2_staticBody, 1.25f, 325 * DEGTORAD);
 	App->physics->CreateRectangle(234, 490, 6, 50, b2_staticBody, 1.25f, 35 * DEGTORAD);
 
@@ -542,19 +560,24 @@ update_status ModuleSceneIntro::Update()
 
 		ejector_force += 50.0f;
 		ejector1->body->ApplyForceToCenter(b2Vec2(0, ejector_force), true);
+		App->audio->PlayFx(eject1_fx);
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP) {
 		ejector_force = 0.0f;
+		App->audio->PlayFx(eject2_fx);
+	}
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT){
 
 		left_flipper->body->ApplyAngularImpulse(DEGTORAD * -90, true);
+		App->audio->PlayFx(flipper_fx);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT){
 
 		right_flipper->body->ApplyAngularImpulse(DEGTORAD * 90, true);
+		App->audio->PlayFx(flipper_fx);
 	}
 
 	/*
@@ -617,11 +640,26 @@ update_status ModuleSceneIntro::Update()
 	fVector normal(0.0f, 0.0f);
 
 	// All draw functions ------------------------------------------------------
+
+
 	p2List_item<PhysBody*>* c = background.getFirst();
 
 	while (c != NULL){
 		App->renderer->Blit(backgroundmap, PIXEL_TO_METERS(0), PIXEL_TO_METERS(0), NULL, 0.1f, NULL);
 		c = c->next;
+	}
+	p2List_item<Sensor>* s = sensors.getFirst();
+
+	while (s != NULL){
+		if (s->data.image == true){
+			if (s->data.type == SensorType::small_bonus || s->data.type == SensorType::big_bonus)
+				App->renderer->Blit(s->data.texture, s->data.x + 2, s->data.y + 1);
+			if (s->data.type == SensorType::shroomish)
+				App->renderer->Blit(s->data.texture, s->data.x -6, s->data.y -6);
+			else
+				App->renderer->Blit(s->data.texture, s->data.x, s->data.y);
+		}
+		s = s->next;
 	}
 
 	c = circles.getFirst();
@@ -632,12 +670,13 @@ update_status ModuleSceneIntro::Update()
 		c->data->GetPosition(x, y);
 		App->renderer->Blit(circle, x, y, NULL, 1.0f, c->data->GetRotation());
 
-		if (y > 610 && lifes > 0) {
+		if (y > 610 && lifes >= 0 && game_over == false) {
 
 			circles.del(c);
 			circles.add(App->physics->CreateCircle(350, 470, 6, b2_dynamicBody, 0.5f, false));
 			circles.getLast()->data->listener = this;
 			lifes--;
+			App->audio->PlayFx(deadball_fx);
 
 		}
 		c = c->next;
@@ -672,6 +711,7 @@ update_status ModuleSceneIntro::Update()
 
 		c = c->next;
 	}
+
 	/*
 	c = boxes.getFirst();
 
@@ -720,6 +760,18 @@ update_status ModuleSceneIntro::Update()
 	char title[50];
 	sprintf_s(title, "Balls: %d -- Score: %d -- Last score: %d", lifes, score, last_score);
 	App->window->SetTitle(title);
+
+	if (lifes == 1)
+		game_over == true;
+
+	if (lifes == -1){
+
+		App->audio->PlayFx(losing_fx);
+		lifes = 3;
+		last_score = score;
+		score = 0;
+
+	}
 	
 
 	return UPDATE_CONTINUE;
@@ -728,56 +780,44 @@ update_status ModuleSceneIntro::Update()
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
-
 	//App->audio->PlayFx(bonus_fx);
 
-
-	p2List_item<PhysBody*>* c;
-	c = sensors_bonus.getFirst();
-	while (c != NULL){
-		if (c->data == bodyA) {
-			//App->player->score += 10;
-			//App->audio->PlayFx(audio_bonus);
-			c->data->GetPosition(x, y);
-			if (y > 100)
-				App->renderer->Blit(big_bonus, x, y, NULL, 1.0f, c->data->GetRotation());
-			else
-				App->renderer->Blit(small_bonus, x, y, NULL, 1.0f, c->data->GetRotation());
-		}
-	}
-
-	c = sensors_pokeballs.getFirst();
-	while (c != NULL){
-		int i = 0;
-		if (c->data == bodyA) {
-			//i++
-			//App->audio->PlayFx(audio_pokeball);
-
-			c->data->GetPosition(x, y);
-			//App->renderer->Blit(pokeball_img, x, y, NULL, 1.0f, c->data->GetRotation());
-		}
-		//if (i = 3)
-		//App->player->score += 20;
-	}
-
-	c = bouncers.getFirst();
-	while (c != NULL){
-		if (c->data == bodyA) {
-			//App->player->score += 15;
-			//App->audio->PlayFx(audio_shroomish);
-			c->data->GetPosition(x, y);
-			//App->renderer->Blit(shroomish_img, x, y, NULL, 1.0f, c->data->GetRotation());
-		}
-	}
 	
-	c = buttons.getFirst();
-	while (c != NULL){
-		if (c->data == bodyA) {
-			//App->player->score += 15;
-			//App->audio->PlayFx(audio_button);
-			c->data->GetPosition(x, y);
-			//App->renderer->Blit(shroomish_img, x, y, NULL, 1.0f, c->data->GetRotation());
+	p2List_item<Sensor>* c = sensors.getFirst();
+	while (c != NULL)
+	{
+		if (bodyA == c->data.body){
+			App->audio->PlayFx(c->data.sound);
+			if (c->data.type == SensorType::shroomish){
+				c->data.image = !c->data.image;
+			}
+			c->data.image = true;
+			int i = 0;
+			switch (c->data.type){
+			case SensorType::big_bonus:
+				score += 20;
+				break;
+			case SensorType::small_bonus:
+				score += 10;
+				break;
+			case SensorType::pokeball:
+				i++;
+				if (i = 3)
+				score += 30;
+				break;
+			case SensorType::bouncer:
+				score +=5;
+				break;
+			case SensorType::button:
+				score +=5;
+				break;
+			case SensorType::shroomish:
+				score +=25;
+				break;
+
+			}
 		}
+		c = c->next;
 	}
 
 
@@ -796,3 +836,72 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 
 }
+Sensor::Sensor(ModuleSceneIntro* scene, int x, int y, SensorType type)
+{
+	this->x = x;
+	this->y = y;
+	this->type = type;
+
+	image = false;
+	collision = false;
+	int radius = 0;
+
+	switch (type)
+	{
+	case big_bonus:
+		radius = 8;
+		texture = scene->big_bonus;
+		sound = scene->bonus_fx;
+
+		body = scene->App->physics->CreateCircle(x + radius, y + radius, radius, b2_staticBody, 0.0f, true);
+		body->listener = scene;
+		break;
+
+	case small_bonus:
+		radius = 6;
+		texture = scene->small_bonus;
+		sound = scene->bonus_fx;
+
+		body = scene->App->physics->CreateCircle(x + radius, y + radius, radius, b2_staticBody, 0.0f, true);
+		body->listener = scene;
+		break;
+
+	case pokeball:
+		radius = 8;
+		texture = scene->pokeball;
+		sound = scene->bonus_fx;
+
+		body = scene->App->physics->CreateCircle(x + radius, y + radius, radius, b2_staticBody, 0.0f, true);
+		body->listener = scene;
+		break;
+
+	case shroomish:
+		radius = 8;
+		texture = scene->shroomish;
+		sound = scene->shroomish_fx;
+
+		body = scene->App->physics->CreateCircle(x + radius, y + radius, radius, b2_staticBody, 0.0f, true);
+		body->listener = scene;
+		break;
+		/*
+	case bouncer:
+		//texture = scene->;
+		sound = scene->triangle_fx;
+		body = scene->App->physics->CreateRectangle(x, y, 6, 50, b2_staticBody, 1.25f, 325 * DEGTORAD);
+		body->listener = scene;
+		break;
+		*/
+	case button:
+		radius = 6;
+		texture = NULL;
+		sound = scene->button_fx;
+		body = scene->App->physics->CreateCircle(x + radius, y + radius, radius, b2_staticBody, 0.0f, true);
+		body->listener = scene;
+		break;
+
+
+	}
+
+}
+
+
