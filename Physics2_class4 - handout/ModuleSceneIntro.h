@@ -6,6 +6,34 @@
 
 class PhysBody;
 
+enum SensorType
+{
+	big_bonus,
+	small_bonus,
+	pokeball,
+	shroomish,
+};
+
+struct Sensor
+{
+	Sensor() : body(NULL), texture(NULL), sound(0), image(false), collision(false)
+	{}
+
+	Sensor(ModuleSceneIntro* physics, int x, int y, SensorType type);
+
+	PhysBody* body;
+	int x;
+	int y;
+
+	uint sound;
+	bool image;
+	bool collision;
+
+	SensorType type;
+	SDL_Texture* texture;
+
+};
+
 class ModuleSceneIntro : public Module
 {
 public:
@@ -23,10 +51,7 @@ public:
 	p2List<PhysBody*> polygons;
 	//p2List<PhysBody*> ricks;
 	p2List<PhysBody*> background;
-	p2List<PhysBody*> sensors_bonus;
-	p2List<PhysBody*> sensors_pokeballs;
-	p2List<PhysBody*> bouncers;
-	p2List<PhysBody*> buttons;
+	p2List<Sensor> sensors;
 	
 
 	PhysBody* sensor;
@@ -44,11 +69,24 @@ public:
 	SDL_Texture* box;
 	SDL_Texture* left_flipper_img;
 	SDL_Texture* right_flipper_img;
+
 	SDL_Texture* spoink;
+	
+	SDL_Texture* small_bonus;
+	SDL_Texture* big_bonus;
+	SDL_Texture* pokeball;
+	SDL_Texture* shroomish;
+	uint bonus_fx;
+	uint shroomish_fx;
+	uint eject1_fx;
+	uint eject2_fx;
+	uint flipper_fx;
+	uint triangle_fx;
+	uint button_fx;
+
 	//SDL_Texture* rick;
 	SDL_Texture* backgroundmap;
 	SDL_Texture* frontground;
-	uint bonus_fx;
 	p2Point<int> ray;
 	bool ray_on;
 	float ejector_force;

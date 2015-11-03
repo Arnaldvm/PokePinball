@@ -34,6 +34,19 @@ bool ModuleSceneIntro::Start()
 	left_flipper_img = App->textures->Load("pinball/left_trigger.png");
 	right_flipper_img = App->textures->Load("pinball/right_trigger.png");
 	spoink = App->textures->Load("pinball/spoink.png");
+
+	big_bonus = App->textures->Load("pinball/big_bonus.png");
+	small_bonus = App->textures->Load("pinball/small_bonus.png");
+	pokeball = App->textures->Load("pinball/pokeball_img.png");
+	shroomish = App->textures->Load("pinball/shroomish_img.png");
+	uint bonus_fx;
+	uint shroomish_fx;
+	uint eject1_fx;
+	uint eject2_fx;
+	uint flipper_fx;
+	uint triangle_fx;
+	uint button_fx;
+
 	//bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 
@@ -718,15 +731,18 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 	//App->audio->PlayFx(bonus_fx);
 
+
 	p2List_item<PhysBody*>* c;
 	c = sensors_bonus.getFirst();
 	while (c != NULL){
 		if (c->data == bodyA) {
 			//App->player->score += 10;
 			//App->audio->PlayFx(audio_bonus);
-			int	x, y;
 			c->data->GetPosition(x, y);
-			//App->renderer->Blit(bonus_img, x, y, NULL, 1.0f, c->data->GetRotation());
+			if (y > 100)
+				App->renderer->Blit(big_bonus, x, y, NULL, 1.0f, c->data->GetRotation());
+			else
+				App->renderer->Blit(small_bonus, x, y, NULL, 1.0f, c->data->GetRotation());
 		}
 	}
 
@@ -736,7 +752,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		if (c->data == bodyA) {
 			//i++
 			//App->audio->PlayFx(audio_pokeball);
-			int	x, y;
+
 			c->data->GetPosition(x, y);
 			//App->renderer->Blit(pokeball_img, x, y, NULL, 1.0f, c->data->GetRotation());
 		}
@@ -749,7 +765,6 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		if (c->data == bodyA) {
 			//App->player->score += 15;
 			//App->audio->PlayFx(audio_shroomish);
-			int	x, y;
 			c->data->GetPosition(x, y);
 			//App->renderer->Blit(shroomish_img, x, y, NULL, 1.0f, c->data->GetRotation());
 		}
@@ -760,11 +775,11 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		if (c->data == bodyA) {
 			//App->player->score += 15;
 			//App->audio->PlayFx(audio_button);
-			int	x, y;
 			c->data->GetPosition(x, y);
 			//App->renderer->Blit(shroomish_img, x, y, NULL, 1.0f, c->data->GetRotation());
 		}
 	}
+
 
 	/*
 	if(bodyA)
