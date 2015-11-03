@@ -32,13 +32,13 @@ bool ModuleSceneIntro::Start()
 	frontground = App->textures->Load("pinball/frontground.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
-	circles.add(App->physics->CreateCircle(350, 470, 6, b2_dynamicBody));
+	circles.add(App->physics->CreateCircle(350, 470, 6, b2_dynamicBody, 0.5f));
 	//circles.getLast()->data->listener = this;
 
 
 	//------Ejector
-	ejector1 = App->physics->CreateRectangle(345, 575, 18, 35,b2_dynamicBody);
-	ejector2 = App->physics->CreateRectangle(335, 500, 2, 2, b2_staticBody);
+	ejector1 = App->physics->CreateRectangle(345, 575, 18, 35,b2_dynamicBody, 0.75f, 0.0f);
+	ejector2 = App->physics->CreateRectangle(335, 500, 2, 2, b2_staticBody, 0.75f, 0.0f);
 	boxes.add(ejector1);
 	boxes.add(ejector2);
 	App->physics->CreateLineJoint(ejector1, ejector2, 0, 0, 0, 0, 20.0f, 1.0f);
@@ -48,8 +48,8 @@ bool ModuleSceneIntro::Start()
 	lifes = 3;
 
 	//------Flippers
-	left_ball = App->physics->CreateCircle(125, 552, 1, b2_staticBody);
-	right_ball = App->physics->CreateCircle(219, 552, 1, b2_staticBody);
+	left_ball = App->physics->CreateCircle(125, 552, 1, b2_staticBody, 1.0f);
+	right_ball = App->physics->CreateCircle(219, 552, 1, b2_staticBody, 1.0f);
 
 	int polygon1[16] = {
 		122, 540,
@@ -77,8 +77,18 @@ bool ModuleSceneIntro::Start()
 	right_flipper = App->physics->CreatePolygon(PIXEL_TO_METERS(220), PIXEL_TO_METERS(500), polygon2, 16);
 	polygons.add(left_flipper);
 	polygons.add(right_flipper);
-	App->physics->CreateRevoluteJoint(left_ball, left_flipper, 0, 0, 0, 0, 30, -30);
-	App->physics->CreateRevoluteJoint(right_ball, right_flipper, 0, 0, 0, 0, 30, -30);
+	App->physics->CreateRevoluteJoint(left_flipper, left_ball, 0, 0, 0, 0, 30, -30);
+	App->physics->CreateRevoluteJoint(right_flipper, right_ball, 0, 0, 0, 0, 30, -30);
+
+
+	//-----------Bouncers
+	App->physics->CreateCircle(166, 222, 8, b2_staticBody, 1.5f);
+	App->physics->CreateCircle(143, 182, 8, b2_staticBody, 1.5f);
+	App->physics->CreateCircle(192, 182, 8, b2_staticBody, 1.5f);
+
+	App->physics->CreateRectangle(112, 488, 10, 53, b2_staticBody, 1.5f, 325*DEGTORAD);
+	App->physics->CreateRectangle(234, 488, 10, 53, b2_staticBody, 1.5f, 35 *DEGTORAD);
+
 
 	//Background Chains
 	int borders[324] = {
@@ -480,7 +490,7 @@ update_status ModuleSceneIntro::Update()
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 6, b2_dynamicBody));
+		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 6, b2_dynamicBody, 0.5f));
 		circles.getLast()->data->listener = this;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
@@ -576,7 +586,7 @@ update_status ModuleSceneIntro::Update()
 		if (y > 610 && lifes > 0) {
 
 			circles.del(c);
-			circles.add(App->physics->CreateCircle(350, 470, 6, b2_dynamicBody));
+			circles.add(App->physics->CreateCircle(350, 470, 6, b2_dynamicBody, 0.5f));
 			lifes--;
 
 		}
