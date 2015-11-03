@@ -40,6 +40,8 @@ bool ModuleSceneIntro::Start()
 	small_bonus = App->textures->Load("pinball/small_bonus.png");
 	pokeball = App->textures->Load("pinball/pokeball_img.png");
 	shroomish = App->textures->Load("pinball/shroomish_img.png");
+	left_triangle = App->textures->Load("pinball/left_triangle.png");
+	right_triangle = App->textures->Load("pinball/right_triangle.png");
 
 	//---- Audios
 	bonus_fx = App->audio->LoadFx("pinball/audio_bonus.wav");
@@ -83,8 +85,8 @@ bool ModuleSceneIntro::Start()
 	sensors.add(Sensor(this, 275, 421, SensorType::button));
 
 	//Triangles bouncers
-	sensors.add(Sensor(this, 112, 490, SensorType::bouncer));
-	sensors.add(Sensor(this, 234, 490, SensorType::bouncer));
+	sensors.add(Sensor(this, 112, 490, SensorType::triangle_left));
+	sensors.add(Sensor(this, 234, 490, SensorType::triangle_right));
 
 	
 
@@ -805,8 +807,11 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				if (i = 3)
 				score += 30;
 				break;
-			case SensorType::bouncer:
+			case SensorType::triangle_left:
 				score +=5;
+				break;
+			case SensorType::triangle_right:
+				score += 5;
 				break;
 			case SensorType::button:
 				score +=5;
@@ -883,14 +888,18 @@ Sensor::Sensor(ModuleSceneIntro* scene, int x, int y, SensorType type)
 		body = scene->App->physics->CreateCircle(x + radius, y + radius, radius, b2_staticBody, 0.0f, true);
 		body->listener = scene;
 		break;
-		/*
-	case bouncer:
-		//texture = scene->;
+	case triangle_left:
+		texture = scene->left_triangle;
 		sound = scene->triangle_fx;
 		body = scene->App->physics->CreateRectangle(x, y, 6, 50, b2_staticBody, 1.25f, 325 * DEGTORAD);
 		body->listener = scene;
 		break;
-		*/
+	case triangle_right:
+		texture = scene->right_triangle;
+		sound = scene->triangle_fx;
+		body = scene->App->physics->CreateRectangle(x, y, 6, 50, b2_staticBody, 1.25f, 35 * DEGTORAD);
+		body->listener = scene;
+		break;
 	case button:
 		radius = 6;
 		texture = NULL;

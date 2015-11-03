@@ -14,7 +14,8 @@ enum SensorType
 	pokeball,
 	shroomish,
 	button,
-	bouncer,
+	triangle_left,
+	triangle_right
 };
 
 struct Sensor
@@ -79,6 +80,8 @@ public:
 	SDL_Texture* big_bonus;
 	SDL_Texture* pokeball;
 	SDL_Texture* shroomish;
+	SDL_Texture* left_triangle;
+	SDL_Texture* right_triangle;
 	uint bonus_fx;
 	uint shroomish_fx;
 	uint eject1_fx;
@@ -88,7 +91,6 @@ public:
 	uint button_fx;
 	uint deadball_fx;
 	uint losing_fx;
-		//Freestyle SPAGHETTIcode BITCH
 
 	//SDL_Texture* rick;
 	SDL_Texture* backgroundmap;
