@@ -34,7 +34,9 @@ bool ModuleSceneIntro::Start()
 	left_flipper_img = App->textures->Load("pinball/left_trigger.png");
 	right_flipper_img = App->textures->Load("pinball/right_trigger.png");
 	spoink = App->textures->Load("pinball/spoink.png");
-	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+	//bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+
+
 
 	circles.add(App->physics->CreateCircle(350, 470, 6, b2_dynamicBody, 0.5f, false));
 	circles.getLast()->data->listener = this;
@@ -89,27 +91,34 @@ bool ModuleSceneIntro::Start()
 
 	//-----------Sensors
 
-	App->physics->CreateCircle(47, 479, 7, b2_staticBody, 1.0f, true);
-	App->physics->CreateCircle(82, 479, 7, b2_staticBody, 1.0f, true);
-	App->physics->CreateCircle(263, 479, 7, b2_staticBody, 1.0f, true);
-	App->physics->CreateCircle(298, 479, 7, b2_staticBody, 1.0f, true);
-	App->physics->CreateCircle(150, 473, 8, b2_staticBody, 1.0f, true);
-	App->physics->CreateCircle(173, 473, 8, b2_staticBody, 1.0f, true);
-	App->physics->CreateCircle(196, 473, 8, b2_staticBody, 1.0f, true);
-	App->physics->CreateCircle(127, 134, 4, b2_staticBody, 1.0f, true);
-	App->physics->CreateCircle(157, 134, 4, b2_staticBody, 1.0f, true);
-	App->physics->CreateCircle(187, 134, 4, b2_staticBody, 1.0f, true);
-	App->physics->CreateCircle(273, 250, 7, b2_staticBody, 1.0f, true);
-	App->physics->CreateCircle(85, 241, 7, b2_staticBody, 1.0f, true);
-	App->physics->CreateCircle(131, 258, 4, b2_staticBody, 1.0f, true);
-	App->physics->CreateCircle(85, 285, 4, b2_staticBody, 1.0f, true);
+	//4 bottom
+	sensors_bonus.add(App->physics->CreateCircle(47, 479, 7, b2_staticBody, 1.0f, true));
+	
+	sensors_bonus.add(App->physics->CreateCircle(82, 479, 7, b2_staticBody, 1.0f, true));
+	sensors_bonus.add(App->physics->CreateCircle(263, 479, 7, b2_staticBody, 1.0f, true));
+	sensors_bonus.add(App->physics->CreateCircle(298, 479, 7, b2_staticBody, 1.0f, true));
+	//3 top
+	sensors_bonus.add(App->physics->CreateCircle(127, 134, 4, b2_staticBody, 1.0f, true));
+	sensors_bonus.add(App->physics->CreateCircle(157, 134, 4, b2_staticBody, 1.0f, true));
+	sensors_bonus.add(App->physics->CreateCircle(187, 134, 4, b2_staticBody, 1.0f, true));
+	//wailmer + shop
+	sensors_bonus.add(App->physics->CreateCircle(273, 250, 7, b2_staticBody, 1.0f, true));
+	sensors_bonus.add(App->physics->CreateCircle(85, 241, 7, b2_staticBody, 1.0f, true));
+	
+
+	//pokeballs
+	sensors_pokeballs.add(App->physics->CreateCircle(150, 473, 8, b2_staticBody, 1.0f, true));
+	sensors_pokeballs.add(App->physics->CreateCircle(173, 473, 8, b2_staticBody, 1.0f, true));
+	sensors_pokeballs.add(App->physics->CreateCircle(196, 473, 8, b2_staticBody, 1.0f, true));
 
 	//-----------Bouncers
-	App->physics->CreateCircle(166, 222, 8, b2_staticBody, 1.25f, false);
-	App->physics->CreateCircle(143, 182, 8, b2_staticBody, 1.25f, false);
-	App->physics->CreateCircle(192, 182, 8, b2_staticBody, 1.25f, false);
-	App->physics->CreateCircle(65, 427, 8, b2_staticBody, 1.25f, false);
-	App->physics->CreateCircle(281, 427, 8, b2_staticBody, 1.25f, false);
+	//Shroomishs
+	bouncers.add(App->physics->CreateCircle(166, 222, 8, b2_staticBody, 1.25f, false));
+	bouncers.add(App->physics->CreateCircle(143, 182, 8, b2_staticBody, 1.25f, false));
+	bouncers.add(App->physics->CreateCircle(192, 182, 8, b2_staticBody, 1.25f, false));
+	//Buttons
+	buttons.add(App->physics->CreateCircle(65, 427, 8, b2_staticBody, 1.25f, false));
+	buttons.add(App->physics->CreateCircle(281, 427, 8, b2_staticBody, 1.25f, false));
 
 	App->physics->CreateRectangle(112, 490, 6, 50, b2_staticBody, 1.25f, 325 * DEGTORAD);
 	App->physics->CreateRectangle(234, 490, 6, 50, b2_staticBody, 1.25f, 35 * DEGTORAD);
@@ -707,9 +716,56 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
 
-	App->audio->PlayFx(bonus_fx);
+	//App->audio->PlayFx(bonus_fx);
 
+	p2List_item<PhysBody*>* c;
+	c = sensors_bonus.getFirst();
+	while (c != NULL){
+		if (c->data == bodyA) {
+			//App->player->score += 10;
+			//App->audio->PlayFx(audio_bonus);
+			int	x, y;
+			c->data->GetPosition(x, y);
+			//App->renderer->Blit(bonus_img, x, y, NULL, 1.0f, c->data->GetRotation());
+		}
+	}
+
+	c = sensors_pokeballs.getFirst();
+	while (c != NULL){
+		int i = 0;
+		if (c->data == bodyA) {
+			//i++
+			//App->audio->PlayFx(audio_pokeball);
+			int	x, y;
+			c->data->GetPosition(x, y);
+			//App->renderer->Blit(pokeball_img, x, y, NULL, 1.0f, c->data->GetRotation());
+		}
+		//if (i = 3)
+		//App->player->score += 20;
+	}
+
+	c = bouncers.getFirst();
+	while (c != NULL){
+		if (c->data == bodyA) {
+			//App->player->score += 15;
+			//App->audio->PlayFx(audio_shroomish);
+			int	x, y;
+			c->data->GetPosition(x, y);
+			//App->renderer->Blit(shroomish_img, x, y, NULL, 1.0f, c->data->GetRotation());
+		}
+	}
 	
+	c = buttons.getFirst();
+	while (c != NULL){
+		if (c->data == bodyA) {
+			//App->player->score += 15;
+			//App->audio->PlayFx(audio_button);
+			int	x, y;
+			c->data->GetPosition(x, y);
+			//App->renderer->Blit(shroomish_img, x, y, NULL, 1.0f, c->data->GetRotation());
+		}
+	}
+
 	/*
 	if(bodyA)
 	{
@@ -722,4 +778,6 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		bodyB->GetPosition(x, y);
 		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
 	}*/
+
+
 }

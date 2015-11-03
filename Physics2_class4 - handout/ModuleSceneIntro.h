@@ -23,6 +23,10 @@ public:
 	p2List<PhysBody*> polygons;
 	//p2List<PhysBody*> ricks;
 	p2List<PhysBody*> background;
+	p2List<PhysBody*> sensors_bonus;
+	p2List<PhysBody*> sensors_pokeballs;
+	p2List<PhysBody*> bouncers;
+	p2List<PhysBody*> buttons;
 	
 
 	PhysBody* sensor;
