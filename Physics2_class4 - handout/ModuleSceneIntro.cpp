@@ -80,8 +80,8 @@ bool ModuleSceneIntro::Start()
 	right_flipper = App->physics->CreatePolygon(PIXEL_TO_METERS(220), PIXEL_TO_METERS(500), polygon2, 16);
 	polygons.add(left_flipper);
 	polygons.add(right_flipper);
-	App->physics->CreateRevoluteJoint(left_flipper, left_ball, 126, 535, 0, 0, 50, -50);
-	App->physics->CreateRevoluteJoint(right_flipper, right_ball, 220, 542, 0, 0, 50, -50);
+	App->physics->CreateRevoluteJoint(left_flipper, left_ball, 126, 535, 0, 0, 70, 10);
+	App->physics->CreateRevoluteJoint(right_flipper, right_ball, 220, 542, 0, 0, -10, -70);
 
 	//-----------Sensors
 

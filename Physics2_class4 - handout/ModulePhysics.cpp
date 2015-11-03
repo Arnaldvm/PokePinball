@@ -241,6 +241,8 @@ PhysBody* ModulePhysics::CreatePolygon(int x, int y, int* points, int size)
 
 	b2FixtureDef polyfixture;
 	polyfixture.shape = &polyshape;
+	polyfixture.density = 4.0f;
+	polyfixture.restitution = 0.0f;
 	p->CreateFixture(&polyfixture);
 
 	delete[] poly;
