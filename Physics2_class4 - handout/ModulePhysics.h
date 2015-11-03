@@ -47,7 +47,7 @@ public:
 	PhysBody* CreateRectangle(int x, int y, int width, int height, b2BodyType type, float restitution, float rotation);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
-	PhysBody* CreatePolygon(int x, int y, int* points, int size);
+	PhysBody* CreatePolygon(int x, int y, int* points, int size, int restitution);
 	void CreateLineJoint(PhysBody* body_1, PhysBody* body_2, int x_pivot_1, int y_pivot_1, int x_pivot_2, int y_pivot_2, float frequency, float damping);
 	void CreateRevoluteJoint(PhysBody* bodyA, PhysBody* bodyB, int anchor_Ax, int anchor_Ay, int anchor_Bx, int anchor_By, int max_angle, int min_angle);
 

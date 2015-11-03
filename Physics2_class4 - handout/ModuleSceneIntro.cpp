@@ -30,8 +30,8 @@ bool ModuleSceneIntro::Start()
 	//rick = App->textures->Load("pinball/rick_head.png");
 	backgroundmap = App->textures->Load("pinball/pinball.png");
 	frontground = App->textures->Load("pinball/frontground.png");
-	left_flipper_img = App->textures->Load("pinball/left_flipper.png");
-	right_flipper_img = App->textures->Load("pinball/right_flipper.png");
+	left_flipper_img = App->textures->Load("pinball/left_trigger.png");
+	right_flipper_img = App->textures->Load("pinball/right_trigger.png");
 	spoink = App->textures->Load("pinball/spoink.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
@@ -76,8 +76,8 @@ bool ModuleSceneIntro::Start()
 		218, 552
 	};
 
-	left_flipper = App->physics->CreatePolygon(PIXEL_TO_METERS(121), PIXEL_TO_METERS(558), polygon1, 16);
-	right_flipper = App->physics->CreatePolygon(PIXEL_TO_METERS(220), PIXEL_TO_METERS(500), polygon2, 16);
+	left_flipper = App->physics->CreatePolygon(PIXEL_TO_METERS(121), PIXEL_TO_METERS(558), polygon1, 16, 0.1f);
+	right_flipper = App->physics->CreatePolygon(PIXEL_TO_METERS(220), PIXEL_TO_METERS(500), polygon2, 16, 0.1f);
 	polygons.add(left_flipper);
 	polygons.add(right_flipper);
 	App->physics->CreateRevoluteJoint(left_flipper, left_ball, 126, 535, 0, 0, 70, 10);
@@ -101,14 +101,14 @@ bool ModuleSceneIntro::Start()
 	App->physics->CreateCircle(85, 285, 4, b2_staticBody, 1.0f, true);
 
 	//-----------Bouncers
-	App->physics->CreateCircle(166, 222, 8, b2_staticBody, 1.5f, false);
-	App->physics->CreateCircle(143, 182, 8, b2_staticBody, 1.5f, false);
-	App->physics->CreateCircle(192, 182, 8, b2_staticBody, 1.5f, false);
-	App->physics->CreateCircle(65, 427, 8, b2_staticBody, 1.5f, false);
-	App->physics->CreateCircle(281, 427, 8, b2_staticBody, 1.5f, false);
+	App->physics->CreateCircle(166, 222, 8, b2_staticBody, 1.25f, false);
+	App->physics->CreateCircle(143, 182, 8, b2_staticBody, 1.25f, false);
+	App->physics->CreateCircle(192, 182, 8, b2_staticBody, 1.25f, false);
+	App->physics->CreateCircle(65, 427, 8, b2_staticBody, 1.25f, false);
+	App->physics->CreateCircle(281, 427, 8, b2_staticBody, 1.25f, false);
 
-	App->physics->CreateRectangle(112, 488, 10, 53, b2_staticBody, 1.5f, 325 * DEGTORAD);
-	App->physics->CreateRectangle(234, 488, 10, 53, b2_staticBody, 1.5f, 35 * DEGTORAD);
+	App->physics->CreateRectangle(112, 488, 10, 53, b2_staticBody, 1.25f, 325 * DEGTORAD);
+	App->physics->CreateRectangle(234, 488, 10, 53, b2_staticBody, 1.25f, 35 * DEGTORAD);
 
 
 	//Background Chains
@@ -502,19 +502,19 @@ update_status ModuleSceneIntro::Update()
 {
 	/*if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		ray_on = !ray_on;
-		ray.x = App->input->GetMouseX();
-		ray.y = App->input->GetMouseY();
+	ray_on = !ray_on;
+	ray.x = App->input->GetMouseX();
+	ray.y = App->input->GetMouseY();
 	}*/
 
-	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 6, b2_dynamicBody, 0.5f, false));
 		circles.getLast()->data->listener = this;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
 
-		ejector_force += 25.0f;
+		ejector_force += 50.0f;
 		ejector1->body->ApplyForceToCenter(b2Vec2(0, ejector_force), true);
 	}
 
@@ -523,66 +523,66 @@ update_status ModuleSceneIntro::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT){
 
-		left_flipper->body->ApplyAngularImpulse(DEGTORAD * -360, true);
+		left_flipper->body->ApplyAngularImpulse(DEGTORAD * -90, true);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT){
 
-		right_flipper->body->ApplyAngularImpulse(DEGTORAD * 360, true);
+		right_flipper->body->ApplyAngularImpulse(DEGTORAD * 90, true);
 	}
 
 	/*
 	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 	{
-		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
+	boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
 	{
-		// Pivot 0, 0
-		int rick_head[64] = {
-			14, 36,
-			42, 40,
-			40, 0,
-			75, 30,
-			88, 4,
-			94, 39,
-			111, 36,
-			104, 58,
-			107, 62,
-			117, 67,
-			109, 73,
-			110, 85,
-			106, 91,
-			109, 99,
-			103, 104,
-			100, 115,
-			106, 121,
-			103, 125,
-			98, 126,
-			95, 137,
-			83, 147,
-			67, 147,
-			53, 140,
-			46, 132,
-			34, 136,
-			38, 126,
-			23, 123,
-			30, 114,
-			10, 102,
-			29, 90,
-			0, 75,
-			30, 62
-		};
+	// Pivot 0, 0
+	int rick_head[64] = {
+	14, 36,
+	42, 40,
+	40, 0,
+	75, 30,
+	88, 4,
+	94, 39,
+	111, 36,
+	104, 58,
+	107, 62,
+	117, 67,
+	109, 73,
+	110, 85,
+	106, 91,
+	109, 99,
+	103, 104,
+	100, 115,
+	106, 121,
+	103, 125,
+	98, 126,
+	95, 137,
+	83, 147,
+	67, 147,
+	53, 140,
+	46, 132,
+	34, 136,
+	38, 126,
+	23, 123,
+	30, 114,
+	10, 102,
+	29, 90,
+	0, 75,
+	30, 62
+	};
 
-		ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64));
+	ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64));
 	}
 	*/
-	
+
 
 
 	// Prepare for raycast ------------------------------------------------------
-	
+
 	iPoint mouse;
 	mouse.x = App->input->GetMouseX();
 	mouse.y = App->input->GetMouseY();
@@ -600,12 +600,12 @@ update_status ModuleSceneIntro::Update()
 
 	c = circles.getFirst();
 
-	while(c != NULL)
+	while (c != NULL)
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
 		App->renderer->Blit(circle, x, y, NULL, 1.0f, c->data->GetRotation());
-		
+
 		if (y > 610 && lifes > 0) {
 
 			circles.del(c);
@@ -615,29 +615,42 @@ update_status ModuleSceneIntro::Update()
 
 		}
 		c = c->next;
-		
-	}
+
+	} 
 
 	c = polygons.getFirst();
 
-	while (c != NULL)
-	{
+	int x, y;
+	c->data->GetPosition(x, y);
+	//x = METERS_TO_PIXELS(left_flipper->body->GetPosition().x);
+	//y = METERS_TO_PIXELS(left_flipper->body->GetPosition().y);
+	App->renderer->Blit(left_flipper_img, x, y, NULL, 1.0f, left_flipper->body->GetAngle(), 0, 0);
+
+	x = METERS_TO_PIXELS(right_flipper->body->GetPosition().x);
+	y = METERS_TO_PIXELS(right_flipper->body->GetPosition().y);
+	App->renderer->Blit(right_flipper_img, x, y, NULL, 1.0f, right_flipper->body->GetAngle(), 0, 0);
+
+	
+	/*c = polygons.getFirst();
+	while (c != NULL){
 		int x, y;
 		c->data->GetPosition(x, y);
-		c->data->GetRotation();
-		App->renderer->Blit(left_flipper_img, PIXEL_TO_METERS(126), PIXEL_TO_METERS(535), NULL, 0.1f, NULL);
-		App->renderer->Blit(right_flipper_img, PIXEL_TO_METERS(220), PIXEL_TO_METERS(542), NULL, 0.1f, NULL);
-
+		if (y < 210) { 
+			App->renderer->Blit(left_flipper_img, PIXEL_TO_METERS(x), PIXEL_TO_METERS(y), NULL, 1.0f, c->data->GetRotation());
+		}
+		else {
+			App->renderer->Blit(right_flipper_img, PIXEL_TO_METERS(x), PIXEL_TO_METERS(y), NULL, 1.0f, c->data->GetRotation());
+		}
 		c = c->next;
-	}
-
+	}*/
 	c = boxes.getFirst();
 
 	while (c != NULL)
 	{ 
 		int x, y;
 		c->data->GetPosition(x, y);
-		App->renderer->Blit(spoink, PIXEL_TO_METERS(345), PIXEL_TO_METERS(575), NULL, 0.1f, NULL);
+		if (c->data->body->GetType() != b2_staticBody)
+			App->renderer->Blit(spoink, x-3, y-4, NULL, 1.0f, c->data->GetRotation());
 
 		c = c->next;
 	}

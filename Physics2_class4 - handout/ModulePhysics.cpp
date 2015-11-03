@@ -219,7 +219,7 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 }
 
 
-PhysBody* ModulePhysics::CreatePolygon(int x, int y, int* points, int size)
+PhysBody* ModulePhysics::CreatePolygon(int x, int y, int* points, int size, int restitution)
 {
 	b2BodyDef polygon;
 	polygon.type = b2_dynamicBody;
@@ -242,7 +242,7 @@ PhysBody* ModulePhysics::CreatePolygon(int x, int y, int* points, int size)
 	b2FixtureDef polyfixture;
 	polyfixture.shape = &polyshape;
 	polyfixture.density = 4.0f;
-	polyfixture.restitution = 0.0f;
+	polyfixture.restitution = restitution;
 	p->CreateFixture(&polyfixture);
 
 	delete[] poly;
