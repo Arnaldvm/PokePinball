@@ -27,8 +27,6 @@ bool ModuleSceneIntro::Start()
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
 	circle = App->textures->Load("pinball/pokeball8.png"); 
-	//box = App->textures->Load("pinball/crate.png");
-	//rick = App->textures->Load("pinball/rick_head.png");
 	backgroundmap = App->textures->Load("pinball/pinball.png");
 	frontground = App->textures->Load("pinball/frontground.png");
 	left_flipper_img = App->textures->Load("pinball/left_trigger.png");
@@ -573,64 +571,16 @@ update_status ModuleSceneIntro::Update()
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT){
 
 		left_flipper->body->ApplyAngularImpulse(DEGTORAD * -90, true);
-		App->audio->PlayFx(flipper_fx);
 	}
+	
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT){
 
 		right_flipper->body->ApplyAngularImpulse(DEGTORAD * 90, true);
+		
+	}
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_UP || App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_UP)
 		App->audio->PlayFx(flipper_fx);
-	}
-
-	/*
-	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
-	{
-	boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
-	}
-
-	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
-	{
-	// Pivot 0, 0
-	int rick_head[64] = {
-	14, 36,
-	42, 40,
-	40, 0,
-	75, 30,
-	88, 4,
-	94, 39,
-	111, 36,
-	104, 58,
-	107, 62,
-	117, 67,
-	109, 73,
-	110, 85,
-	106, 91,
-	109, 99,
-	103, 104,
-	100, 115,
-	106, 121,
-	103, 125,
-	98, 126,
-	95, 137,
-	83, 147,
-	67, 147,
-	53, 140,
-	46, 132,
-	34, 136,
-	38, 126,
-	23, 123,
-	30, 114,
-	10, 102,
-	29, 90,
-	0, 75,
-	30, 62
-	};
-
-	ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64));
-	}
-	*/
-
-
 
 	// Prepare for raycast ------------------------------------------------------
 
@@ -650,19 +600,7 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(backgroundmap, PIXEL_TO_METERS(0), PIXEL_TO_METERS(0), NULL, 0.1f, NULL);
 		c = c->next;
 	}
-	p2List_item<Sensor>* s = sensors.getFirst();
 
-	while (s != NULL){
-		if (s->data.image == true){
-			if (s->data.type == SensorType::small_bonus || s->data.type == SensorType::big_bonus)
-				App->renderer->Blit(s->data.texture, s->data.x + 2, s->data.y + 1);
-			if (s->data.type == SensorType::shroomish)
-				App->renderer->Blit(s->data.texture, s->data.x -6, s->data.y -6);
-			else
-				App->renderer->Blit(s->data.texture, s->data.x, s->data.y);
-		}
-		s = s->next;
-	}
 
 	c = circles.getFirst();
 
@@ -686,22 +624,12 @@ update_status ModuleSceneIntro::Update()
 	} 
 
 
+
 	App->renderer->Blit(left_flipper_img, 117, 545, NULL, 1.0f, RADTODEG * left_flipper->body->GetAngle(), 7, 7);
 	App->renderer->Blit(right_flipper_img, 180, 544, NULL, 1.0f, RADTODEG * right_flipper->body->GetAngle(), 38, 10);
 
 	
-	/*c = polygons.getFirst();
-	while (c != NULL){
-		int x, y;
-		c->data->GetPosition(x, y);
-		if (y < 210) { 
-			App->renderer->Blit(left_flipper_img, PIXEL_TO_METERS(x), PIXEL_TO_METERS(y), NULL, 1.0f, c->data->GetRotation());
-		}
-		else {
-			App->renderer->Blit(right_flipper_img, PIXEL_TO_METERS(x), PIXEL_TO_METERS(y), NULL, 1.0f, c->data->GetRotation());
-		}
-		c = c->next;
-	}*/
+
 	c = boxes.getFirst();
 
 	while (c != NULL)
@@ -714,37 +642,35 @@ update_status ModuleSceneIntro::Update()
 		c = c->next;
 	}
 
-	/*
-	c = boxes.getFirst();
-
-	while(c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(box, x, y, NULL, 1.0f, c->data->GetRotation());
-		if(ray_on)
-		{
-			int hit = c->data->RayCast(ray.x, ray.y, mouse.x, mouse.y, normal.x, normal.y);
-			if(hit >= 0)
-				ray_hit = hit;
-		}
-		c = c->next;
-	}
-
-	c = ricks.getFirst();
-
-	while(c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(rick, x, y, NULL, 1.0f, c->data->GetRotation());
-		c = c->next;
-	}
-	*/
 	//Background --------------------------
 
 	App->renderer->Blit(frontground, PIXEL_TO_METERS(0), PIXEL_TO_METERS(0), NULL, 0.1f, NULL);
 
+	p2List_item<Sensor>* s = sensors.getFirst();
+
+	while (s != NULL){
+		if (s->data.image == true){
+			if (s->data.type == SensorType::small_bonus || s->data.type == SensorType::big_bonus)
+				App->renderer->Blit(s->data.texture, s->data.x + 2, s->data.y + 1);
+			if (s->data.type == SensorType::shroomish) {
+				App->renderer->Blit(s->data.texture, s->data.x - 8, s->data.y - 10);
+				s->data.image = false;
+			}
+			if (s->data.type == SensorType::triangle_left) {
+				App->renderer->Blit(s->data.texture, s->data.x -15, s->data.y-15);
+				s->data.image = false;
+			}
+			if (s->data.type == SensorType::triangle_right) {
+				App->renderer->Blit(s->data.texture, s->data.x - 15, s->data.y - 15);
+				s->data.image = false;
+			}
+			if (s->data.type == SensorType::pokeball)
+				App->renderer->Blit(s->data.texture, s->data.x, s->data.y);
+			
+		}
+	
+		s = s->next;
+	}
 
 	// ray -----------------
 	if(ray_on == true)
@@ -772,6 +698,12 @@ update_status ModuleSceneIntro::Update()
 		lifes = 3;
 		last_score = score;
 		score = 0;
+		p2List_item<Sensor>* s = sensors.getFirst();
+		while (s != NULL){
+			if (s->data.image == true)
+				s->data.image = false;
+			s = s->next;
+		}
 
 	}
 	
@@ -782,19 +714,15 @@ update_status ModuleSceneIntro::Update()
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
-	//App->audio->PlayFx(bonus_fx);
 
-	
 	p2List_item<Sensor>* c = sensors.getFirst();
 	while (c != NULL)
 	{
 		if (bodyA == c->data.body){
 			App->audio->PlayFx(c->data.sound);
-			if (c->data.type == SensorType::shroomish){
-				c->data.image = !c->data.image;
-			}
+
 			c->data.image = true;
-			int i = 0;
+			
 			switch (c->data.type){
 			case SensorType::big_bonus:
 				score += 20;
@@ -803,9 +731,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				score += 10;
 				break;
 			case SensorType::pokeball:
-				i++;
-				if (i = 3)
-				score += 30;
+				score += 5;
 				break;
 			case SensorType::triangle_left:
 				score +=5;
@@ -825,19 +751,6 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		c = c->next;
 	}
 
-
-	/*
-	if(bodyA)
-	{
-		bodyA->GetPosition(x, y);
-		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
-	}
-
-	if(bodyB)
-	{
-		bodyB->GetPosition(x, y);
-		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
-	}*/
 
 
 }
@@ -881,7 +794,7 @@ Sensor::Sensor(ModuleSceneIntro* scene, int x, int y, SensorType type)
 		break;
 
 	case shroomish:
-		radius = 8;
+		radius = 10;
 		texture = scene->shroomish;
 		sound = scene->shroomish_fx;
 
