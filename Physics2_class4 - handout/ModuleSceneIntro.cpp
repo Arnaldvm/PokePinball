@@ -26,7 +26,7 @@ bool ModuleSceneIntro::Start()
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
 	circle = App->textures->Load("pinball/pokeball8.png"); 
-	box = App->textures->Load("pinball/crate.png");
+	//box = App->textures->Load("pinball/crate.png");
 	//rick = App->textures->Load("pinball/rick_head.png");
 	backgroundmap = App->textures->Load("pinball/pinball.png");
 	frontground = App->textures->Load("pinball/frontground.png");
@@ -36,15 +36,15 @@ bool ModuleSceneIntro::Start()
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 	circles.add(App->physics->CreateCircle(350, 470, 6, b2_dynamicBody, 0.5f));
-	//circles.getLast()->data->listener = this;
+	circles.getLast()->data->listener = this;
 
 
 	//------Ejector
-	ejector1 = App->physics->CreateRectangle(345, 575, 18, 35,b2_dynamicBody, 0.75f, 0.0f);
-	ejector2 = App->physics->CreateRectangle(335, 500, 2, 2, b2_staticBody, 0.75f, 0.0f);
+	ejector1 = App->physics->CreateRectangle(345, 575, 18, 35,b2_dynamicBody, 0.5f, 0.0f);
+	ejector2 = App->physics->CreateRectangle(335, 500, 2, 2, b2_staticBody, 0.5f, 0.0f);
 	boxes.add(ejector1);
 	boxes.add(ejector2);
-	App->physics->CreateLineJoint(ejector1, ejector2, 0, 0, 0, 0, 20.0f, 1.0f);
+	App->physics->CreateLineJoint(ejector1, ejector2, 0, 0, 0, 0, 25.0f, 0.8f);
 	ejector_force = 0;
 
 
@@ -80,26 +80,27 @@ bool ModuleSceneIntro::Start()
 	right_flipper = App->physics->CreatePolygon(PIXEL_TO_METERS(220), PIXEL_TO_METERS(500), polygon2, 16);
 	polygons.add(left_flipper);
 	polygons.add(right_flipper);
-	App->physics->CreateRevoluteJoint(left_flipper, left_ball, 126, 535, 0, 0, 30, -30);
-	App->physics->CreateRevoluteJoint(right_flipper, right_ball, 220, 542, 0, 0, 30, -30);
+	App->physics->CreateRevoluteJoint(left_flipper, left_ball, 126, 535, 0, 0, 50, -50);
+	App->physics->CreateRevoluteJoint(right_flipper, right_ball, 220, 542, 0, 0, 50, -50);
 
 
 	//-----------Bouncers
 	App->physics->CreateCircle(166, 222, 8, b2_staticBody, 1.5f);
 	App->physics->CreateCircle(143, 182, 8, b2_staticBody, 1.5f);
 	App->physics->CreateCircle(192, 182, 8, b2_staticBody, 1.5f);
+	App->physics->CreateCircle(65, 427, 8, b2_staticBody, 1.5f);
+	App->physics->CreateCircle(281, 427, 8, b2_staticBody, 1.5f);
 
 	App->physics->CreateRectangle(112, 488, 10, 53, b2_staticBody, 1.5f, 325 * DEGTORAD);
 	App->physics->CreateRectangle(234, 488, 10, 53, b2_staticBody, 1.5f, 35 * DEGTORAD);
 
 
 	//Background Chains
-	int borders[324] = {
+	int borders[320] = {
 		144, 600,
 		144, 589,
 		57, 542,
-		57, 560,
-		34, 560,
+		35, 527,
 		34, 465,
 		35, 457,
 		38, 451,
@@ -163,8 +164,8 @@ bool ModuleSceneIntro::Start()
 		359, 142,
 		360, 348,
 		360, 439,
-		360, 610,
-		339, 610,
+		360, 620,
+		339, 620,
 		339, 510,
 		339, 394,
 		340, 192,
@@ -246,8 +247,7 @@ bool ModuleSceneIntro::Start()
 		311, 473,
 		311, 490,
 		311, 511,
-		311, 560,
-		290, 560,
+		311, 530,
 		290, 541,
 		203, 588,
 		203, 600,
@@ -455,7 +455,7 @@ bool ModuleSceneIntro::Start()
 		272, 516
 	};
 
-	background.add(App->physics->CreateChain(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0), borders, 324));
+	background.add(App->physics->CreateChain(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0), borders, 320));
 	background.add(App->physics->CreateChain(PIXEL_TO_METERS(93), PIXEL_TO_METERS(465), leftri, 22));
 	background.add(App->physics->CreateChain(PIXEL_TO_METERS(219), PIXEL_TO_METERS(464), rightri, 24));
 	background.add(App->physics->CreateChain(PIXEL_TO_METERS(49), PIXEL_TO_METERS(133), leftstructure, 74));
@@ -498,17 +498,21 @@ update_status ModuleSceneIntro::Update()
 	}
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
 
-		ejector_force += 50.0f;
+		ejector_force += 25.0f;
 		ejector1->body->ApplyForceToCenter(b2Vec2(0, ejector_force), true);
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
+		ejector_force = 0.0f;
+
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT){
 
-		left_flipper->body->ApplyAngularImpulse(-360, true);
+		left_flipper->body->ApplyAngularImpulse(DEGTORAD * -360, true);
 	}
+
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT){
 
-		right_flipper->body->ApplyAngularImpulse(360, true);
+		right_flipper->body->ApplyAngularImpulse(DEGTORAD * 360, true);
 	}
 
 	/*
@@ -590,6 +594,7 @@ update_status ModuleSceneIntro::Update()
 
 			circles.del(c);
 			circles.add(App->physics->CreateCircle(350, 470, 6, b2_dynamicBody, 0.5f));
+			circles.getLast()->data->listener = this;
 			lifes--;
 
 		}
@@ -610,7 +615,7 @@ update_status ModuleSceneIntro::Update()
 		c = c->next;
 	}
 
-	c = rectangles.getFirst();
+	c = boxes.getFirst();
 
 	while (c != NULL)
 	{ 

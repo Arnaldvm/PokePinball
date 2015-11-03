@@ -23,7 +23,6 @@ public:
 	p2List<PhysBody*> polygons;
 	//p2List<PhysBody*> ricks;
 	p2List<PhysBody*> background;
-	p2List<PhysBody*> rectangles;
 	
 
 	PhysBody* sensor;

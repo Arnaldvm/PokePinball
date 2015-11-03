@@ -241,7 +241,6 @@ PhysBody* ModulePhysics::CreatePolygon(int x, int y, int* points, int size)
 	PhysBody* polybody = new PhysBody();
 	polybody->body = p;
 	p->SetUserData(polybody);
-	polybody->width = polybody->height = 0;
 
 	return(polybody);
 }
@@ -487,11 +486,11 @@ void ModulePhysics::CreateRevoluteJoint(PhysBody* bodyA, PhysBody* bodyB, int an
 	if (max_angle != NULL && min_angle != NULL)
 	{
 		revolutejoint.enableLimit = true;
-		revolutejoint.lowerAngle = -45 * DEGTORAD;
-		revolutejoint.upperAngle = 45 * DEGTORAD;
+		revolutejoint.lowerAngle = min_angle * DEGTORAD;
+		revolutejoint.upperAngle = max_angle * DEGTORAD;
 	}
 
-	revolute_joint = (b2RevoluteJoint*)world->CreateJoint(&revolutejoint);
+	world->CreateJoint(&revolutejoint);
 }
 
 
