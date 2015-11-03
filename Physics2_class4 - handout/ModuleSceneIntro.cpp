@@ -6,6 +6,7 @@
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
+#include "ModuleWindow.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -51,7 +52,8 @@ bool ModuleSceneIntro::Start()
 
 
 	lifes = 3;
-
+	score = 0;
+	last_score = 0;
 	//------Flippers
 	left_ball = App->physics->CreateCircle(125, 552, 1, b2_staticBody, 1.0f, false);
 	right_ball = App->physics->CreateCircle(219, 552, 1, b2_staticBody, 1.0f, false);
@@ -78,8 +80,8 @@ bool ModuleSceneIntro::Start()
 		218, 552
 	};
 
-	left_flipper = App->physics->CreatePolygon(PIXEL_TO_METERS(121), PIXEL_TO_METERS(558), polygon1, 16, 0.1f);
-	right_flipper = App->physics->CreatePolygon(PIXEL_TO_METERS(220), PIXEL_TO_METERS(500), polygon2, 16, 0.1f);
+	left_flipper = App->physics->CreatePolygon(PIXEL_TO_METERS(121), PIXEL_TO_METERS(558), polygon1, 16, 0.5f);
+	right_flipper = App->physics->CreatePolygon(PIXEL_TO_METERS(220), PIXEL_TO_METERS(500), polygon2, 16, 0.5f);
 	polygons.add(left_flipper);
 	polygons.add(right_flipper);
 	App->physics->CreateRevoluteJoint(left_flipper, left_ball, 126, 535, 0, 0, 70, 10);
@@ -701,6 +703,11 @@ update_status ModuleSceneIntro::Update()
 			App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
 	}
 
+	char title[50];
+	sprintf_s(title, "Balls: %d -- Score: %d -- Last score: %d", lifes, score, last_score);
+	App->window->SetTitle(title);
+	
+
 	return UPDATE_CONTINUE;
 }
 
@@ -710,6 +717,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 	App->audio->PlayFx(bonus_fx);
 
+	
 	/*
 	if(bodyA)
 	{

@@ -225,6 +225,7 @@ PhysBody* ModulePhysics::CreatePolygon(int x, int y, int* points, int size, int 
 	polygon.type = b2_dynamicBody;
 	polygon.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 	polygon.angle = 0.0f;
+	polygon.bullet = true;
 
 	b2Body* p = world->CreateBody(&polygon);
 

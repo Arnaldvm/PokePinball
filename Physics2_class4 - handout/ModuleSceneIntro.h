@@ -49,4 +49,6 @@ public:
 	bool ray_on;
 	float ejector_force;
 	uint lifes;
+	uint score;
+	uint last_score;
 };
