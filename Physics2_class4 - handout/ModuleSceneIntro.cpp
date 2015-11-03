@@ -111,8 +111,8 @@ bool ModuleSceneIntro::Start()
 	App->physics->CreateCircle(65, 427, 8, b2_staticBody, 1.25f, false);
 	App->physics->CreateCircle(281, 427, 8, b2_staticBody, 1.25f, false);
 
-	App->physics->CreateRectangle(112, 488, 10, 53, b2_staticBody, 1.25f, 325 * DEGTORAD);
-	App->physics->CreateRectangle(234, 488, 10, 53, b2_staticBody, 1.25f, 35 * DEGTORAD);
+	App->physics->CreateRectangle(112, 490, 6, 50, b2_staticBody, 1.25f, 325 * DEGTORAD);
+	App->physics->CreateRectangle(234, 490, 6, 50, b2_staticBody, 1.25f, 35 * DEGTORAD);
 
 
 	//Background Chains
@@ -622,17 +622,9 @@ update_status ModuleSceneIntro::Update()
 
 	} 
 
-	c = polygons.getFirst();
 
-	int x, y;
-	x = METERS_TO_PIXELS(left_flipper->body->GetPosition().x);
-	y = METERS_TO_PIXELS(left_flipper->body->GetPosition().y);
-	App->renderer->Blit(left_flipper_img, 120, 545, NULL, 1.0f, left_flipper->body->GetAngle(), 0, 0);
-
-	c = c->next;
-	x = METERS_TO_PIXELS(right_flipper->body->GetPosition().x);
-	y = METERS_TO_PIXELS(right_flipper->body->GetPosition().y);
-	App->renderer->Blit(right_flipper_img, 177, 545, NULL, 1.0f, right_flipper->body->GetAngle(), 0, 0);
+	App->renderer->Blit(left_flipper_img, 117, 545, NULL, 1.0f, RADTODEG * left_flipper->body->GetAngle(), 7, 7);
+	App->renderer->Blit(right_flipper_img, 180, 544, NULL, 1.0f, RADTODEG * right_flipper->body->GetAngle(), 38, 10);
 
 	
 	/*c = polygons.getFirst();
