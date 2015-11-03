@@ -85,20 +85,20 @@ bool ModuleSceneIntro::Start()
 
 	//-----------Sensors
 
-	App->physics->CreateCircle(47, 479, 7, b2_staticBody, 1.5f, true);
-	App->physics->CreateCircle(82, 479, 7, b2_staticBody, 1.5f, true);
-	App->physics->CreateCircle(263, 479, 7, b2_staticBody, 1.5f, true);
-	App->physics->CreateCircle(298, 479, 7, b2_staticBody, 1.5f, true);
-	App->physics->CreateCircle(150, 437, 8, b2_staticBody, 1.5f, true);
-	App->physics->CreateCircle(173, 437, 8, b2_staticBody, 1.5f, true);
-	App->physics->CreateCircle(196, 437, 8, b2_staticBody, 1.5f, true);
-	App->physics->CreateCircle(127, 134, 4, b2_staticBody, 1.5f, true);
-	App->physics->CreateCircle(157, 134, 4, b2_staticBody, 1.5f, true);
-	App->physics->CreateCircle(187, 134, 4, b2_staticBody, 1.5f, true);
-	App->physics->CreateCircle(273, 250, 7, b2_staticBody, 1.5f, true);
-	App->physics->CreateCircle(85, 241, 7, b2_staticBody, 1.5f, true);
-	App->physics->CreateCircle(131, 258, 4, b2_staticBody, 1.5f, true);
-	App->physics->CreateCircle(85, 285, 4, b2_staticBody, 1.5f, true);
+	App->physics->CreateCircle(47, 479, 7, b2_staticBody, 1.0f, true);
+	App->physics->CreateCircle(82, 479, 7, b2_staticBody, 1.0f, true);
+	App->physics->CreateCircle(263, 479, 7, b2_staticBody, 1.0f, true);
+	App->physics->CreateCircle(298, 479, 7, b2_staticBody, 1.0f, true);
+	App->physics->CreateCircle(150, 473, 8, b2_staticBody, 1.0f, true);
+	App->physics->CreateCircle(173, 473, 8, b2_staticBody, 1.0f, true);
+	App->physics->CreateCircle(196, 473, 8, b2_staticBody, 1.0f, true);
+	App->physics->CreateCircle(127, 134, 4, b2_staticBody, 1.0f, true);
+	App->physics->CreateCircle(157, 134, 4, b2_staticBody, 1.0f, true);
+	App->physics->CreateCircle(187, 134, 4, b2_staticBody, 1.0f, true);
+	App->physics->CreateCircle(273, 250, 7, b2_staticBody, 1.0f, true);
+	App->physics->CreateCircle(85, 241, 7, b2_staticBody, 1.0f, true);
+	App->physics->CreateCircle(131, 258, 4, b2_staticBody, 1.0f, true);
+	App->physics->CreateCircle(85, 285, 4, b2_staticBody, 1.0f, true);
 
 	//-----------Bouncers
 	App->physics->CreateCircle(166, 222, 8, b2_staticBody, 1.5f, false);
