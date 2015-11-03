@@ -38,6 +38,8 @@ bool ModuleSceneIntro::Start()
 	circles.add(App->physics->CreateCircle(350, 470, 6, b2_dynamicBody, 0.5f, false));
 	circles.getLast()->data->listener = this;
 
+	App->physics->CreateCircle(173, 595, 3, b2_staticBody, 0.5f, false);
+
 
 	//------Ejector
 	ejector1 = App->physics->CreateRectangle(345, 575, 18, 35,b2_dynamicBody, 0.5f, 0.0f);
@@ -448,8 +450,8 @@ bool ModuleSceneIntro::Start()
 		61, 497,
 		64, 503,
 		82, 514,
-		111, 531,
-		100, 544,
+		113, 532,
+		101, 545,
 		89, 537,
 		72, 526,
 		57, 515
@@ -464,7 +466,7 @@ bool ModuleSceneIntro::Start()
 		270, 499,
 		266, 503,
 		250, 514,
-		224, 529,
+		217, 534,
 		227, 544,
 		238, 538,
 		256, 526,
@@ -621,14 +623,14 @@ update_status ModuleSceneIntro::Update()
 	c = polygons.getFirst();
 
 	int x, y;
-	c->data->GetPosition(x, y);
-	//x = METERS_TO_PIXELS(left_flipper->body->GetPosition().x);
-	//y = METERS_TO_PIXELS(left_flipper->body->GetPosition().y);
-	App->renderer->Blit(left_flipper_img, x, y, NULL, 1.0f, left_flipper->body->GetAngle(), 0, 0);
+	x = METERS_TO_PIXELS(left_flipper->body->GetPosition().x);
+	y = METERS_TO_PIXELS(left_flipper->body->GetPosition().y);
+	App->renderer->Blit(left_flipper_img, 120, 545, NULL, 1.0f, left_flipper->body->GetAngle(), 0, 0);
 
+	c = c->next;
 	x = METERS_TO_PIXELS(right_flipper->body->GetPosition().x);
 	y = METERS_TO_PIXELS(right_flipper->body->GetPosition().y);
-	App->renderer->Blit(right_flipper_img, x, y, NULL, 1.0f, right_flipper->body->GetAngle(), 0, 0);
+	App->renderer->Blit(right_flipper_img, 177, 545, NULL, 1.0f, right_flipper->body->GetAngle(), 0, 0);
 
 	
 	/*c = polygons.getFirst();
