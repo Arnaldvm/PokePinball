@@ -650,8 +650,10 @@ update_status ModuleSceneIntro::Update()
 
 	while (s != NULL){
 		if (s->data.image == true){
-			if (s->data.type == SensorType::small_bonus || s->data.type == SensorType::big_bonus)
-				App->renderer->Blit(s->data.texture, s->data.x + 2, s->data.y + 1);
+			if (s->data.type == SensorType::small_bonus || s->data.type == SensorType::big_bonus) {
+				if (237 > s->data.y || s->data.y > 249 )
+					App->renderer->Blit(s->data.texture, s->data.x + 2, s->data.y + 1);
+			}
 			if (s->data.type == SensorType::shroomish) {
 				App->renderer->Blit(s->data.texture, s->data.x-12, s->data.y - 8);
 				s->data.image = false;
